@@ -1,11 +1,11 @@
 @charset "utf-8";
 /* reset */
-*{/* margin:0; *//* padding:0; */}
-body{ background:#ebeef3; font-size:12px; color: #333;font-family: Helvetica,Pingfang SC,Microsoft YaHei,STHeiti,Verdana,Arial,Tahoma,sans-serif; }
+*{margin:0; padding:0;}
+body{ magrgin:0; padding: 0;background:#ebeef3; font-size:12px; color: #333;font-family: Helvetica,Pingfang SC,Microsoft YaHei,STHeiti,Verdana,Arial,Tahoma,sans-serif; }
 img{ border:none; vertical-align:top;}
 ul,ol,li{list-style:none;}
 em{ font-style:normal;}
-input,select,textarea{ outline:none; background:none; border:none; color: #333;	font-family: Helvetica,Pingfang SC,Microsoft YaHei,STHeiti,Verdana,Arial,Tahoma,sans-serif; }
+input,select,textarea{  outline:none; background:none; border:none; color: #333;	font-family: Helvetica,Pingfang SC,Microsoft YaHei,STHeiti,Verdana,Arial,Tahoma,sans-serif; }
 textarea{resize:none;}
 table { border-collapse:collapse; border-spacing:0}
 a{ text-decoration:none; outline:none; color:#333;}

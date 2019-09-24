@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Author ：chenxinyou.
@@ -78,7 +79,7 @@ public class WelfareServiceImpl implements WelfareService {
     @Override
     public PageInfo<WelfareEntity> selectListByUser(int pageNo, int pageSize, String userId) {
         PageInfo<WelfareEntity> pageInfo = PageHelper.startPage(pageNo, pageSize).doSelectPageInfo(() -> {
-//            welfareDao.selectListByState(userId);
+            welfareDao.selectListByUserId(userId);
         });
         return pageInfo;
     }
@@ -90,6 +91,11 @@ public class WelfareServiceImpl implements WelfareService {
             welfareDao.selectListByState(type);
         });
         return pageInfo;
+    }
+
+    @Override
+    public List<WelfareEntity> selectListToThree() {
+        return welfareDao.selectWelfareByThree();
     }
 
     @Override
@@ -120,5 +126,23 @@ public class WelfareServiceImpl implements WelfareService {
             jsonObject.put("msg", "项目不存在");
         }
         return jsonObject;
+    }
+
+    @Override
+    public int totalAmount() {
+        Integer totalAmount = userAccountLogDao.selectTotalAmount();
+        if (totalAmount == null) {
+            return 0;
+        }
+        return totalAmount;
+    }
+
+    @Override
+    public int totalPeople() {
+        Integer totalPeople = userAccountLogDao.selectTotalAmount();
+        if (totalPeople == null) {
+            return 0;
+        }
+        return totalPeople;
     }
 }

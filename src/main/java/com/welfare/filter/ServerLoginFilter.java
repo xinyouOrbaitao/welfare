@@ -5,6 +5,8 @@ import com.welfare.entity.UserEntity;
 import com.welfare.util.CookieUtil;
 import com.welfare.util.LoginAccountUtil;
 import com.welfare.util.WebUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -26,6 +28,8 @@ import java.util.Map;
  * @Description:
  */
 public class ServerLoginFilter implements Filter {
+    private Logger logger = LoggerFactory.getLogger(ServerLoginFilter.class);
+
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = null;
@@ -49,6 +53,7 @@ public class ServerLoginFilter implements Filter {
 //                response.sendRedirect("/login");
 //            }
         } catch (Exception e) {
+            logger.error("登录异常",e);
             Map<String, String> map = new HashMap<>();
             map.put("message", "登录异常");
             WebUtil.writeJson2Client(response, JSON.toJSONString(map));

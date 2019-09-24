@@ -20,16 +20,19 @@ public class IndexController {
 
     @RequestMapping("/")
     public String index(Model modelMap, PageParam pageParam) {
-        List<WelfareEntity> list = new ArrayList<>();
         PageInfo<WelfareEntity> resultList = welfareService.selectListByIndex(pageParam.getPageNo(), pageParam.getPageSize());
-        WelfareEntity entity = new WelfareEntity();
-        entity.setWelfareAccount(1);
-        entity.setCreateTime(new Date());
-        entity.setWelfareTitle("爱心互助平台-我想活下去");
-        entity.setId(123);
-        entity.setTag("大病，癌症");
-        list.add(entity);
-        modelMap.addAttribute("entity", resultList);
+
+        modelMap.addAttribute("entityList", resultList);
+        int totalAmount = welfareService.totalAmount();
+        int totalPeople = welfareService.totalPeople();
+        //捐款总人数
+        modelMap.addAttribute("totalPeople", totalPeople);
+        //捐款总金额
+        modelMap.addAttribute("totalAmount", totalAmount);
+
+        List<WelfareEntity> welfareEntityList = welfareService.selectListToThree();
+        //首页轮播图
+        modelMap.addAttribute("welfareEntityList", welfareEntityList);
         return "index";
     }
 }

@@ -11,6 +11,7 @@ import com.welfare.service.WelfareService;
 import com.welfare.util.LoginAccountUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -74,4 +75,6 @@ public class WelfareController {
         jsonObject.put("list", welfareLogList);
         return jsonObject.toJSONString();
     }
+
+
 }

@@ -50,8 +50,16 @@ public interface WelfareDao extends MyMapper<WelfareEntity> {
     )
     public List<WelfareEntity> selectListByState(@Param("state") Integer state);
 
+    @Select("select * from welfare where welfare_sponsor=#{welfareSponsor,jdbcType=VARCHAR}")
+    public List<WelfareEntity> selectListByUserId(@Param("welfareSponsor") String userId);
+
+    @ResultMap(value = "query")
     @Select("select * from welfare where id=#{id,jdbcType=VARCHAR}")
     public WelfareEntity selectWelfareOne(@Param("id") String id);
+
+    @ResultMap(value = "query")
+    @Select("select * FROM welfare WHERE state = 2 ORDER BY create_time DESC limit 3")
+    public List<WelfareEntity> selectWelfareByThree();
 
     @Update("update welfare set " +
             " welfare_actual_account =#{welfareActualAccount,jdbcType=INTEGER}" +

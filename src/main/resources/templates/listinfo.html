@@ -1,5 +1,5 @@
 <!DOCTYPE>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
   <head>
     
     <title>项目列表</title> 
@@ -9,11 +9,7 @@
  	<script src="../static/js/jquery-2.2.3.min.js"></script>
     <script src="../static/js/bootstrap.min.js" ></script>
     <script src="../static/js/downgundong.js"></script>
-     <script type="text/javascript">
-    function selectchange(index){
-   			window.location.href="../static/person/listinfo.html?status="+index;
-    }
-	</script>
+
   </head>
   
   <body>
@@ -22,11 +18,10 @@
            　        		<a href="##" class="navbar-brand">爱心公益网 </a>
         </div>
         <ul class="nav navbar-nav">
-            <li><a href="../static/person/index.jsp">公益首页</a></li>
-            <li><a href="../static/person/listinfo.jsp">公益活动</a></li>
-            <li><a href="../static/person/personal.jsp">个人中心</a></li>
-            <li><a href="../static/person/help.jsp">我要求助</a></li>
-            <li><a href="../static/admin/allproject.jsp">管理活动</a></li>
+            <li><a href="/">公益首页</a></li>
+            <li><a href="/listinfo">公益活动</a></li>
+            <li><a href="/user">个人中心</a></li>
+            <li><a href="/add">我要求助</a></li>
         </ul>
         <form action="##" class="navbar-form navbar-left">
             <div class="form-group">

@@ -38,4 +38,10 @@ public interface UserAccountLogDao extends MyMapper<UserAccountLogEntity> {
             "</script>"
     )
     public List<UserAccountLogEntity> selectListByState(@Param("state") Integer state, @Param("userId")long userId);
+
+    @Select("SELECT SUM(amount) FROM user_account_log WHERE type = 2 ")
+    public Integer selectTotalAmount();
+
+    @Select("SELECT count(*) FROM user_account_log WHERE type = 2 ")
+    public Integer selectTotalPeople();
 }

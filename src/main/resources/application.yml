@@ -7,11 +7,23 @@ spring:
     url: jdbc:mysql://localhost:3306/welfare?useUnicode=true&amp;characterEncoding=utf-8&amp;zeroDateTimeBehavior=convertToNull
     username: root
     password: root
+#      url: jdbc:mysql://47.75.172.109:3306/welfare?useUnicode=true&amp;characterEncoding=utf-8&amp;zeroDateTimeBehavior=convertToNull
+#      username: root
+#      password: 123456
     driver-class-name: com.mysql.jdbc.Driver
   mvc:
     static-path-pattern: /static/**
   thymeleaf:
     prefix: classpath:/templates/
+    cache: false
+  devtools:
+    restart:
+      #热部署生效
+      enabled: true
+      #设置重启的目录
+      additional-paths: resources/**,static/**,templates/**
+      #该目录下的内容修改不重启
+      exclude: data/**
 
 logging.level.com.welfare.dao:
   debug
@@ -31,3 +43,10 @@ welfare:
     url:  localhost
   cookie:
     encryptKey: 168367766d874d98870c8ce618942f48
+  bumo:
+    url: http://10.100.12.129:36002
+    address: buQtLqpEo4XHPXXoncVBy6E2vcrCNFkGbYXm
+    privateKey: privbvXJsPiG1ip5UZftpAMJ2icjsNt1DoW6X8uY4MNew9HMXscsYGLV
+  file:
+    path: d:/data
+

@@ -1,8 +1,17 @@
 package com.welfare.controller;
 
+import com.github.pagehelper.PageInfo;
+import com.welfare.entity.UserEntity;
+import com.welfare.entity.WelfareEntity;
+import com.welfare.entity.vo.PageParam;
+import com.welfare.service.WelfareService;
+import com.welfare.util.LoginAccountUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  * @Author ：chenxinyou.
@@ -12,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 public class ViewController {
+    @Autowired
+    private WelfareService welfareService;
 
     /**
      * 用户
@@ -43,7 +54,7 @@ public class ViewController {
      */
     @RequestMapping("/donateLog")
     public String donateLog(Model modelMap) {
-        return "donateLog";
+        return "userWelfareLog";
     }
 
     /**
@@ -56,4 +67,37 @@ public class ViewController {
     public String detail(Model modelMap) {
         return "detail";
     }
+
+    /**
+     * 个人中心
+     *
+     * @param modelMap
+     * @return
+     */
+    @RequestMapping("/alterperson")
+    public String alterperson(Model modelMap) {
+        return "alterperson";
+    }
+
+    @RequestMapping(value = "/listinfo")
+    public String selectList(Model modelMap, PageParam pageParam) {
+        UserEntity userEntity = LoginAccountUtil.getUserEntity();
+        if (StringUtils.isEmpty(userEntity)) {
+            return "login";
+        }
+        PageInfo<WelfareEntity> resultList = welfareService.selectListByIndex(pageParam.getPageNo(), pageParam.getPageSize());
+        modelMap.addAttribute("list", resultList);
+        return "listinfo";
+    }
+    @RequestMapping(value = "/addProject")
+    public String addProject() {
+        return "addproject";
+    }
+
+   @RequestMapping(value = "/update/userview")
+    public String userview() {
+        return "userUpdate";
+    }
+
+
 }

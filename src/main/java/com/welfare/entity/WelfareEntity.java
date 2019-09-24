@@ -39,7 +39,16 @@ public class WelfareEntity {
     private Integer state;
     @Column(name = "tag")
     private String tag;
+    @Column(name = "image")
+    private String image;
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 
     public String getTag() {
         return tag;

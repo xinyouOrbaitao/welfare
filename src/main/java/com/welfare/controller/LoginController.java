@@ -28,7 +28,7 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
-   /* 登录界面*/
+    /* 登录界面*/
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public ModelAndView login() {
 
@@ -137,7 +137,7 @@ public class LoginController {
         return jsonObject.toString();
     }
 
-    @RequestMapping(value = "/logout", method = RequestMethod.POST)
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public ModelAndView logout(HttpServletRequest req, HttpServletResponse res) {
         LoginAccountUtil.clearYzAdAccountModel();
         CookieUtil.deleteLoginCookie(res, req);
