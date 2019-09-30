@@ -13,8 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,8 +31,9 @@ public class WelfareController {
     @Autowired
     private WelfareLogService welfareLogService;
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String add(WelfareEntity entity) {
+    @RequestMapping(value = "/add", method = RequestMethod.POST , produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public String add(@RequestBody WelfareEntity entity) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("code", "SUCCESS");
         welfareService.save(entity);
@@ -41,6 +41,7 @@ public class WelfareController {
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @ResponseBody
     public String update(WelfareEntity entity) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("code", "SUCCESS");
@@ -49,6 +50,7 @@ public class WelfareController {
     }
 
     @RequestMapping(value = "/selectByUser", method = RequestMethod.POST)
+    @ResponseBody
     public String select(PageParam pageParam) {
         JSONObject jsonObject = new JSONObject();
         UserEntity userEntity = LoginAccountUtil.getUserEntity();
@@ -63,6 +65,7 @@ public class WelfareController {
     }
 
     @RequestMapping(value = "/selectLog", method = RequestMethod.POST)
+    @ResponseBody
     public String selectLog(String welfareId) {
         JSONObject jsonObject = new JSONObject();
         UserEntity userEntity = LoginAccountUtil.getUserEntity();

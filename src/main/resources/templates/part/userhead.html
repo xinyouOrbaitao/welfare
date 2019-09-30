@@ -6,18 +6,18 @@
 </head>
 <body>
 <div class="navbar navbar-default navbar-fixed-top" th:fragment="a">
-    <div class="navbar-header">
-        <a href="/index" class="navbar-brand">公益网</a>
+        <div class="navbar-header">
+            　 <a href="/" class="navbar-brand">公益网</a>
+        </div>
+        <ul class="nav navbar-nav ">
+            <li><a href="/">公益首页</a></li>
+            <li><a href="/listinfo">公益活动</a></li>
+            <li><a href="/user">个人中心</a></li>
+            <li><a href="/addProject">我要求助</a></li>
+        </ul>
+        <div class="navbar-right text-danger">
+            欢迎，<span></span>登录&nbsp;|&nbsp;<span><a class="text-danger">注销</a></span>
+        </div>
     </div>
-    <ul class="nav navbar-nav" >
-        <li><a href="/index">公益首页</a></li>
-        <li><a href="../static/person/listinfo.jsp">公益活动</a></li>
-        <li><a href="/alterperson">个人中心</a></li>
-        <li><a href="../static/person/help.jsp">我要求助</a></li>
-    </ul>
-    <div class="navbar-right text-danger">
-        欢迎，<span></span>登录&nbsp;|&nbsp;<span><a class="text-danger">注销</a></span>
-    </div>
-</div>
 </body>
 </html>

@@ -63,7 +63,22 @@ public interface WelfareDao extends MyMapper<WelfareEntity> {
 
     @Update("update welfare set " +
             " welfare_actual_account =#{welfareActualAccount,jdbcType=INTEGER}" +
-            "where id=#{id,jdbcType=VARCHAR}")
+            " where id=#{id,jdbcType=VARCHAR}")
     public int updateWelfareAccount(@Param("id") long id,
                                     @Param("welfareActualAccount") long welfareActualAccount);
+
+
+    @ResultMap(value = "query")
+    @Select("<script> " +
+            "select * from welfare " +
+            "<where>" +
+            "<if test = 'list!=null '> " +
+            " id in <foreach collection='list' item='id' open='(' separator=',' close = ')'>" +
+            "  #{id} " +
+            "</foreach>" +
+            "</if>" +
+            "</where>" +
+            "</script>"
+    )
+    public List<WelfareEntity> selectListByIdList(@Param("list") List<Long> list);
 }

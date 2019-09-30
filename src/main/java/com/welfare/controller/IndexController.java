@@ -18,6 +18,12 @@ public class IndexController {
     @Autowired
     private WelfareService welfareService;
 
+    /**
+     * 首页
+     * @param modelMap
+     * @param pageParam
+     * @return
+     */
     @RequestMapping("/")
     public String index(Model modelMap, PageParam pageParam) {
         PageInfo<WelfareEntity> resultList = welfareService.selectListByIndex(pageParam.getPageNo(), pageParam.getPageSize());

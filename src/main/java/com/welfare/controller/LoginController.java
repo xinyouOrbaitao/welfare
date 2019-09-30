@@ -45,7 +45,7 @@ public class LoginController {
     /* 忘记密码界面*/
     @RequestMapping(value = "/updatePassword", method = RequestMethod.GET)
     public ModelAndView updatePassword() {
-        return new ModelAndView("updatePassword");
+        return new ModelAndView("forgetPassword");
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)

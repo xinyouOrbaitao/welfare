@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.Date;
+import java.util.List;
+
 /**
  * @Author ：chenxinyou.
  * @Title :
@@ -54,9 +57,9 @@ public class UserAccountServiceImpl implements UserAccountService {
         userAccountDao.updateUserAccount(balance, userId);
         UserAccountLogEntity userAccountLogEntity = new UserAccountLogEntity();
         userAccountLogEntity.setAmount(amount);
-        userAccountLogEntity.setCreateTime(System.currentTimeMillis());
+        userAccountLogEntity.setCreateTime(new Date());
         userAccountLogEntity.setType("1");
-        userAccountLogEntity.setUserId(Long.parseLong(userAccountEntity.getUserId()));
+        userAccountLogEntity.setUserId(userId);
         userAccountLogDao.insertSelective(userAccountLogEntity);
         jsonObject.put("code", "SUCCESS");
         jsonObject.put("msg", "充值成功");
@@ -89,9 +92,9 @@ public class UserAccountServiceImpl implements UserAccountService {
             userAccountDao.updateUserAccount(balance, userId);
             UserAccountLogEntity userAccountLogEntity = new UserAccountLogEntity();
             userAccountLogEntity.setAmount(amount);
-            userAccountLogEntity.setCreateTime(System.currentTimeMillis());
+            userAccountLogEntity.setCreateTime(new Date());
             userAccountLogEntity.setType("3");
-            userAccountLogEntity.setUserId(Long.parseLong(userAccountEntity.getUserId()));
+            userAccountLogEntity.setUserId(userId);
             userAccountLogDao.insertSelective(userAccountLogEntity);
             jsonObject.put("code", "SUCCESS");
             jsonObject.put("msg", "提现成功");
@@ -109,6 +112,11 @@ public class UserAccountServiceImpl implements UserAccountService {
             userAccountLogDao.selectListByState(state, userId);
         });
         return pageInfo;
+    }
+
+    @Override
+    public List<UserAccountLogEntity> selectLogList(long userId) {
+        return userAccountLogDao.selectListByState(0, userId);
     }
 
     /**
@@ -131,22 +139,28 @@ public class UserAccountServiceImpl implements UserAccountService {
         if (StringUtils.isEmpty(userAccountEntity)) {
             jsonObject.put("code", "error");
             jsonObject.put("msg", "账号余额不足");
+            return jsonObject;
         }
         if (StringUtils.isEmpty(welfareEntity)) {
             jsonObject.put("code", "error");
             jsonObject.put("msg", "项目不存在");
+            return jsonObject;
         }
+        UserEntity param = new UserEntity();
+        param.setId(userId);
+        UserEntity userEntity = userDao.selectOne(param);
         long userMoney = userAccountEntity.getMoney();
         if (userMoney > amount) {
             long balance = userMoney - amount;
             userAccountDao.updateUserAccount(balance, userId);
             UserAccountLogEntity userAccountLogEntity = new UserAccountLogEntity();
             userAccountLogEntity.setAmount(amount);
-            userAccountLogEntity.setCreateTime(System.currentTimeMillis());
+            userAccountLogEntity.setCreateTime(new Date());
             userAccountLogEntity.setWelfareId(welfareId);
             userAccountLogEntity.setWelfareName(welfareEntity.getWelfareName());
             userAccountLogEntity.setType("2");
-            userAccountLogEntity.setUserId(Long.parseLong(userAccountEntity.getUserId()));
+            userAccountLogEntity.setUsername(userEntity.getUsername());
+            userAccountLogEntity.setUserId(userId);
             userAccountLogDao.insertSelective(userAccountLogEntity);
             long total = welfareEntity.getWelfareActualAccount() + amount;
             welfareDao.updateWelfareAccount(welfareEntity.getId(), total);
@@ -155,13 +169,12 @@ public class UserAccountServiceImpl implements UserAccountService {
             }
             WelfareLogEntity welfareLogEntity = new WelfareLogEntity();
             welfareLogEntity.setCode(welfareEntity.getBuHash());
-            welfareLogEntity.setCreateTime(System.currentTimeMillis());
+            welfareLogEntity.setCreateTime(new Date());
             welfareLogEntity.setWelfareId(welfareEntity.getId());
             welfareLogEntity.setWelfareTitle(welfareEntity.getWelfareTitle());
-            UserEntity param = new UserEntity();
-            param.setId(userId);
-            UserEntity userEntity = userDao.selectOne(param);
-            welfareLogEntity.setWelfareSponsor(userEntity.getUsername());
+
+            welfareLogEntity.setWelfareSponsor(userEntity.getId() + "");
+            welfareLogEntity.setWelfareSponsorName(userEntity.getUsername());
             welfareLogDao.insertSelective(welfareLogEntity);
             jsonObject.put("code", "SUCCESS");
             jsonObject.put("msg", "捐赠成功");

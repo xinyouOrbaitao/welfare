@@ -1,6 +1,6 @@
 package com.welfare.entity;
 
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * @Author ：chenxinyou.
@@ -11,9 +11,14 @@ import javax.persistence.Table;
 @Table(name = "user_account")
 public class UserAccountEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String userId;
+    @Column(name = "user_id")
+    private long userId;
+    @Column(name = "money")
     private long money;
+    @Column(name = "code")
     private String code;
 
     public long getId() {
@@ -24,11 +29,11 @@ public class UserAccountEntity {
         this.id = id;
     }
 
-    public String getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 

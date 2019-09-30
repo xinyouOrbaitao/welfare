@@ -85,6 +85,11 @@ public class WelfareServiceImpl implements WelfareService {
     }
 
     @Override
+    public List<WelfareEntity> selectListByUser(String userId) {
+        return welfareDao.selectListByUserId(userId);
+    }
+
+    @Override
     public PageInfo<WelfareEntity> selectListByIndex(int pageNo, int pageSize) {
         int type = 2;
         PageInfo<WelfareEntity> pageInfo = PageHelper.startPage(pageNo, pageSize).doSelectPageInfo(() -> {
@@ -111,7 +116,7 @@ public class WelfareServiceImpl implements WelfareService {
                 //TODO 调用布比接口
                 UserAccountLogEntity userAccountLogEntity = new UserAccountLogEntity();
                 userAccountLogEntity.setAmount(welfareEntity.getWelfareActualAccount());
-                userAccountLogEntity.setCreateTime(System.currentTimeMillis());
+                userAccountLogEntity.setCreateTime(new Date());
                 userAccountLogEntity.setType("4");
                 userAccountLogEntity.setUserId(userEntity.getId());
                 userAccountLogDao.insertSelective(userAccountLogEntity);
@@ -129,6 +134,11 @@ public class WelfareServiceImpl implements WelfareService {
     }
 
     @Override
+    public WelfareEntity selectById(String id) {
+        return welfareDao.selectWelfareOne(id);
+    }
+
+    @Override
     public int totalAmount() {
         Integer totalAmount = userAccountLogDao.selectTotalAmount();
         if (totalAmount == null) {
@@ -139,10 +149,29 @@ public class WelfareServiceImpl implements WelfareService {
 
     @Override
     public int totalPeople() {
-        Integer totalPeople = userAccountLogDao.selectTotalAmount();
+        Integer totalPeople = userAccountLogDao.selectTotalPeople();
         if (totalPeople == null) {
             return 0;
         }
         return totalPeople;
+    }
+
+    /**
+     * 根据项目Id查询捐款总人数
+     * @param id
+     * @return
+     */
+    @Override
+    public int welfarePeopleSize(String id) {
+        Integer total = userAccountLogDao.selectTotalPeopleByWelfate(id);
+        if (total == null) {
+            return 0;
+        }
+        return total;
+    }
+
+    @Override
+    public List<WelfareEntity> selectListByIdList(List<Long> list) {
+        return welfareDao.selectListByIdList(list);
     }
 }

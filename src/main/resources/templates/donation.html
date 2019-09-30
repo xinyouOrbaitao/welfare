@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>充值中心</title>
+    <title>捐款中心</title>
     <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
     <script src="/static/js/jquery-2.2.3.min.js"></script>
     <script src="/static/js/bootstrap.min.js" ></script>
@@ -15,6 +15,36 @@
 
             });
         });
+        function don(){
+            var id = $("#id").val();
+            var welfareTitle = $("#welfareTitle").val();
+            var formData = new FormData();
+            var amount = $("#amount").val();
+            formData.append("welfareTitle",welfareTitle);
+            formData.append("amount",amount);
+            formData.append("welfareId",id);
+            if(!amount){
+                alert("请输入捐款金额");
+                return;
+            }
+            $.ajax({
+                url: "/user/donate",
+                type: "POST",
+                dataType: "json",
+                contentType:false,
+                processData: false,
+                data: formData,
+                success: function (data) {
+                    console.log(data);
+                    if (data.code == "SUCCESS") {
+                        alert("捐款成功");
+                        window.location.href = '/listinfo';
+                    } else {
+                        alert(data.msg);
+                    }
+                }
+            });
+        }
     </script>
 </head>
 <style>
@@ -99,57 +129,31 @@
     }
 
 </style>
-<script>
-    function recharge(){
-        var formData = new FormData();
-        var amount = $("#amount").val();
-        formData.append("amount",amount);
-        if(!amount){
-            alert("请输入充值金额");
-            return;
-        }
-        $.ajax({
-            url: "/user/recharge",
-            type: "POST",
-            dataType: "json",
-            contentType:false,
-            processData: false,
-            data: formData,
-            success: function (data) {
-                console.log(data);
-                if (data.code == "SUCCESS") {
-                    alert("充值成功");
-                    window.location.href = '/account';
-                } else {
-                    alert(data.msg);
-                }
-            }
-        });
-    }
-</script>
 <body>
 <nav class="navbar navbar-default navbar-fixed-top">
 
     <span class="navtitle"><img src="/static/img/pt.jpg"></span>
-    <span class="toptitle">充值中心</span>
+    <span class="toptitle">支付中心</span>
 </nav>
 <div class="container">
     <div class="row">
         <div class="col-xs-8 col-xs-offset-2">
             <div class="title" >
-                <span  id = "welfareTitle">账号余额</span>
-                <span  id="money" th:text="${userAccountEntity.getMoney()}">
+                <input type="hidden" th:value="${entity.id}" id="id">
+                <span th:text="${entity.welfareTitle}" id = "welfareTitle"></span>
+                <span class="pull-right">
 	   				</span>
             </div>
             <div class="content">
-                <p th:text="${user.username}"></p>
+                <p th:text="${user.username}">用户</p>
                 <p>
-                    <span >充值金额：</span>
+                    <span >金额：</span>
                     <input type="number" id="amount" step="20" min="20">
                 </p>
                 <hr class="divider">
-                <div class="pay paystyle"><input type="radio" name="pay1" value="2" checked="checked">快捷支付<img src="../static/img/js.jpg"></div>
-                <button type="button" onclick="recharge()" class="btn btn-success">确认支付</button>
+                <div class="pay"><input type="radio" name="pay1"  value="1">余额支付</div>
+                <div class="pay paystyle"><input type="radio" name="pay1" value="2" checked="checked">快捷支付<img src="/static/img/js.jpg"></div>
+                <button type="button" class="btn btn-success" onclick="don();">确认支付</button>
             </div>
         </div>
     </div>

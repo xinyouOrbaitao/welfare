@@ -75,13 +75,14 @@ footer{
 }
 .partner .hd{ border-bottom:1px solid #e1e1e1; padding-bottom:10px;}
 .partner .bd{ border-top:1px solid #fff; padding:0;}
-.style123{
-	
-	padding-top:10px;
-	padding-bottom:10px;
-	line-height:20px;
-	color: #222222; 
-	font-family: "微软雅黑","黑体";
-	font-size: 15px; 
+.style123 {
+
+	padding-top: 10px;
+	padding-bottom: 10px;
+	line-height: 20px;
+	color: #222222;
+	font-family: "微软雅黑", "黑体";
+	font-size: 15px;
 	font-weight: normal;
+}
 

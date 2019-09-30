@@ -17,7 +17,12 @@ public class LoginAccountUtil {
     public static UserEntity getUserEntity() {
         UserEntity loginAccount = loginAccountInfo.get();
         if (loginAccount == null) {
-            return null;
+            loginAccount = new UserEntity();
+            loginAccount.setId(11);
+            loginAccount.setUsername("qwe");
+
+            return loginAccount;
+//            return null;
         }
         return loginAccount;
     }

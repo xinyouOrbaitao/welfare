@@ -3,12 +3,15 @@ package com.welfare.service.impl;
 import com.welfare.dao.UserAccountDao;
 import com.welfare.dao.UserDao;
 import com.welfare.entity.UserAccountEntity;
+import com.welfare.entity.UserAccountLogEntity;
 import com.welfare.entity.UserEntity;
 import com.welfare.service.UserService;
 import com.welfare.util.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+
+import java.util.List;
 
 /**
  * @Author ：chenxinyou.
@@ -38,7 +41,7 @@ public class UserServiceImpl implements UserService {
         entity = userDao.queryOne(username);
         //TODO 调用布比接口，生成用户账号code
         UserAccountEntity userAccountEntity = new UserAccountEntity();
-        userAccountEntity.setUserId(String.valueOf(entity.getId()));
+        userAccountEntity.setUserId(entity.getId());
         userAccountEntity.setMoney(0);
         userAccountEntity.setCode("");
         userAccountDao.insert(userAccountEntity);
@@ -64,6 +67,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserEntity queryOneByUserId(Integer userId) {
+        UserEntity param = new UserEntity();
+        param.setId(userId);
+        UserEntity entity = userDao.selectOne(param);
+        return entity;
+    }
+
+    @Override
     public String updatePassword(String username, String password, String phone) {
         String md5 = MD5Util.getMD5(password);
        int count = userDao.updatePassword(username, md5,phone);
@@ -77,4 +88,5 @@ public class UserServiceImpl implements UserService {
     public void update(UserEntity userEntity) {
         userDao.updateByPrimaryKeySelective(userEntity);
     }
+
 }

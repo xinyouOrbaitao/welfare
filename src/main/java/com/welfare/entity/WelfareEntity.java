@@ -25,10 +25,14 @@ public class WelfareEntity {
     private long welfareActualAccount;
     @Column(name = "welfare_sponsor")
     private String welfareSponsor;
+    @Column(name = "welfare_sponsor_name")
+    private String welfareSponsorName;
     @Column(name = "welfare_title")
     private String welfareTitle;
     @Column(name = "create_time")
     private Date createTime;
+    @Column(name = "start_time")
+    private Date startTime;
     @Column(name = "end_time")
     private Date endTime;
     @Column(name = "context")
@@ -41,6 +45,34 @@ public class WelfareEntity {
     private String tag;
     @Column(name = "image")
     private String image;
+
+    private String style;
+    private String ratio;
+    private String peopleSize;
+
+    public String getPeopleSize() {
+        return peopleSize;
+    }
+
+    public void setPeopleSize(String peopleSize) {
+        this.peopleSize = peopleSize;
+    }
+
+    public String getStyle() {
+        return style;
+    }
+
+    public void setStyle(String style) {
+        this.style = style;
+    }
+
+    public String getRatio() {
+        return ratio;
+    }
+
+    public void setRatio(String ratio) {
+        this.ratio = ratio;
+    }
 
     public String getImage() {
         return image;
@@ -144,5 +176,21 @@ public class WelfareEntity {
 
     public void setState(Integer state) {
         this.state = state;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getWelfareSponsorName() {
+        return welfareSponsorName;
+    }
+
+    public void setWelfareSponsorName(String welfareSponsorName) {
+        this.welfareSponsorName = welfareSponsorName;
     }
 }

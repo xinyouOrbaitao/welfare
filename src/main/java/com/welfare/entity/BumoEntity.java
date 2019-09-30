@@ -1,6 +1,6 @@
 package com.welfare.entity;
 
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * @Author ：chenxinyou.
@@ -11,11 +11,19 @@ import javax.persistence.Table;
 @Table(name = "bumo")
 public class BumoEntity {
 
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Column(name = "user_id")
     private long userId;
+    @Column(name = "address")
     private String address;
+    @Column(name = "privateKey")
     private String privateKey;
+    @Column(name = "publicKey")
     private String publicKey;
+    @Column(name = "txHash")
     private String txHash;
     public long getId() {
         return id;

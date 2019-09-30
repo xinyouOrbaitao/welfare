@@ -42,6 +42,8 @@ public interface UserAccountService {
      */
     public PageInfo<UserAccountLogEntity> selectLogList(long userId, int pageNo, int pageSize, String type);
 
+    public List<UserAccountLogEntity> selectLogList(long userId);
+
     /**
      * 捐赠金额，
      *

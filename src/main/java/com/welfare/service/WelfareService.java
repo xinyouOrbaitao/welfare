@@ -54,13 +54,21 @@ public interface WelfareService {
      */
     public PageInfo<WelfareEntity> selectListByUser(int pageNo, int pageSize, String userId);
 
+    public List<WelfareEntity> selectListByUser(String userId);
+
     public PageInfo<WelfareEntity> selectListByIndex(int pageNo, int pageSize);
 
     public List<WelfareEntity> selectListToThree();
 
     public JSONObject settlement(String welfareId);
 
+    public WelfareEntity selectById(String id);
+
     public int totalAmount();
 
     public int totalPeople();
+
+    public int welfarePeopleSize(String id);
+
+    public List<WelfareEntity> selectListByIdList(List<Long> list);
 }

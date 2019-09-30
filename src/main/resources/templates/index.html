@@ -2,13 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="layout">
-<head th:replace="part/head :: common_header(~{::title},~{::link},~{::script},~{::meta})">
+    <head th:replace="part/head :: common_header(~{::title},~{::link},~{::script},~{::meta})">
     <title>公益官网</title>
     <meta name="description" content="公益官网">
     <script type="text/javascript" src="../static/js/index.js"></script>
     <script src="../static/js/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="../static/css/index.css">
-
+        <link rel="stylesheet" href="../static/css/style3.css" />
 </head>
 <body>
 <div class="g_head">
@@ -17,56 +17,26 @@
 </div>
 <!--轮播图开始-->
 <div layout:fragment="container" class="container">
-    <!-- 轮播图部分 -->
-    <div class="row col-xs-10 col-xs-offset-1">
-        <div class="carousel slide" id="slidershow" data-ride="carousel">
-            <!-- 设置图片轮播的顺序 -->
-            <ol class="carousel-indicators">
-                <li class="active" data-target="#slidershow" data-slide-to="0"></li>
-                <li data-target="#slidershow" data-slide-to="1"></li>
-                <li data-target="#slidershow" data-slide-to="2"></li>
-            </ol>
-            <!-- 设置轮播图片 -->
-            <div class="carousel-inner">
-                <div class="item active">
-                    <a href="##"><img src="../static/img/c01.jpg" alt=""></a>
-                    <div class="carousel-caption">
-                        <h4>
-                            <span>贫困孤儿助养</span>
-                        </h4>
-                    </div>
-
-                </div>
-                <div class="item">
-                    <a href="##"><img src="../static/img/c02.jpg" alt=""></a>
-                    <div class="carousel-caption">
-                        <h4>
-                            <!--  <a class="btn btn-danger btn-sm">活动</a>-->
-                            <span>99公益日 一起爱</span>
-                        </h4>
-                    </div>
-                </div>
-                <div class="item">
-                    <a href="##"><img src="../static/img/c04.jpg" alt=""></a>
-                    <div class="carousel-caption">
-                        <h4>
-                            <!--  <a class="btn btn-danger btn-sm">活动</a>-->
-                            <span>免费午餐，小善大爱</span>
-                        </h4>
-                    </div>
-                </div>
-            </div>
-            <!-- 设置轮播图片控制器 -->
-            <a class="left carousel-control" href="#slidershow" data-slide="prev">
-                <span class="fa fa-left fa-angle-left fa-3x"></span>
-            </a>
-            <a class="right carousel-control" href="#slidershow" data-slide="next">
-                <span class="fa fa-right fa-angle-right fa-3x"></span>
-            </a>
+    <div class="c-banner">
+        <div class="banner">
+            <ul th:each="entity,loopStatus:${welfareEntityList}">
+                <li><img  th:src="@{/file/down?fileId={image}(image=${entity.image})}"></li>
+            </ul>
+        </div>
+        <div class="nexImg">
+            <img src="/static/img/nexImg.png" />
+        </div>
+        <div class="preImg">
+            <img src="/static/img/preImg.png" />
+        </div>
+        <div class="jumpBtn">
+            <ul>
+                <li jumpImg="0"></li>
+                <li jumpImg="1"></li>
+                <li jumpImg="2"></li>
+            </ul>
         </div>
     </div>
-    <!--轮播图结束-->
-
 
     <!-- 项目信息 显示最新10条数据-->
     <div class="row">
@@ -76,21 +46,19 @@
                 <div calss="WelfareList" th:each="entity:${entityList.list}">
                     <div class="media">
                         <h4 class="media-heading h3 text-a" th:text="${entity.welfareTitle}"></h4>
-                        <a class="pull-left fixedimg" href="#">
+                        <a class="pull-left fixedimg" th:href="@{/welfare/detail/{id}(id=${entity.id})}">
                             <img class="media-object" th:src="@{/file/down?fileId={image}(image=${entity.image})}">
                         </a>
                         <div class="media-body">
-                            <div class="descript" th:text="${entity.context}">
-                                贵州遵义有一条长7200米的生命渠，以潺潺渠水润泽了当地1200多人，
-                                被老百姓亲切地称为“大发渠”，因为修建这条生命之渠的领头人正是草王坝老支书黄大发。
+                            <div class="descript" th:text="${#strings.abbreviate(entity.context,20)}">
                             </div>
                             <br>
                             <p class="text-muted small">
-                                <span class="date"  th:text="${#dates.format(entity.createTime,'yyyy-MM-dd HH:mm:ss')}">2017-04-21 11:53:07更新</span>
+                                <span class="date" th:text="${#dates.format(entity.createTime,'yyyy-MM-dd HH:mm:ss')}"></span>
                             </p>
                             <p class="text-right text-muted lead1">
                                 <i class="fa fa-commenting-o fa-fw"></i>
-                                <a class="text-muted" href="">详情</a>
+                                <a class="text-muted" th:href="@{/welfare/detail/{id}(id=${entity.id})}">详情</a>
                             </p>
                         </div>
                     </div>
@@ -104,18 +72,18 @@
                     <div class="imgbody">
                         <dl>
                             <dt>历史善款总额：</dt>
-                            <dd><span>1,788,172</span>元</dd>
+                            <dd><span th:text="${totalAmount}">1,788,172</span>元</dd>
                         </dl>
                         <dl>
                             <dt>历史爱心总人次：</dt>
-                            <dd><span>105,380</span>人次</dd>
+                            <dd><span th:text="${totalPeople}">105,380</span>人次</dd>
                         </dl>
                     </div>
                 </div>
                 <div class="list3">
                     <div class="title">
                         <span class="listtitle h2">乐捐</span>
-                        <span class="more pull-right">更多</span>
+
                     </div>
                     <div class="body">
                         <img src="../static/img/img-1.jpg">
@@ -127,4 +95,109 @@
 </div>
 <div th:replace="part/footer :: a"></div>
 </body>
+
+    <script type="text/javascript">
+        //定时器返回值
+        var time=null;
+        //记录当前位子
+        var nexImg = 0;
+        //用于获取轮播图图片个数
+        var imgLength = $(".c-banner .banner ul li").length;
+        //当时动态数据的时候使用,上面那个删除
+        // var imgLength =0;
+        //设置底部第一个按钮样式
+        $(".c-banner .jumpBtn ul li[jumpImg="+nexImg+"]").css("background-color","black");
+
+        //页面加载
+        $(document).ready(function(){
+            // dynamicData();
+            //启动定时器,设置时间为3秒一次
+            time =setInterval(intervalImg,3000);
+        });
+
+        //点击上一张
+        $(".preImg").click(function(){
+            //清楚定时器
+            clearInterval(time);
+            var nowImg = nexImg;
+            nexImg = nexImg-1;
+            console.log(nexImg);
+            if(nexImg<0){
+                nexImg=imgLength-1;
+            }
+            //底部按钮样式设置
+            $(".c-banner .jumpBtn ul li").css("background-color","white");
+            $(".c-banner .jumpBtn ul li[jumpImg="+nexImg+"]").css("background-color","black");
+
+            //将当前图片试用绝对定位,下一张图片试用相对定位
+            $(".c-banner .banner ul img").eq(nowImg).css("position","absolute");
+            $(".c-banner .banner ul img").eq(nexImg).css("position","relative");
+
+            //轮播淡入淡出
+            $(".c-banner .banner ul li").eq(nexImg).css("display","block");
+            $(".c-banner .banner ul li").eq(nexImg).stop().animate({"opacity":1},1000);
+            $(".c-banner .banner ul li").eq(nowImg).stop().animate({"opacity":0},1000,function(){
+                $(".c-banner ul li").eq(nowImg).css("display","none");
+            });
+
+            //启动定时器,设置时间为3秒一次
+            time =setInterval(intervalImg,3000);
+        })
+
+        //点击下一张
+        $(".nexImg").click(function(){
+            clearInterval(time);
+            intervalImg();
+            time =setInterval(intervalImg,3000);
+        })
+
+        //轮播图
+        function intervalImg(){
+            if(nexImg<imgLength-1){
+                nexImg++;
+            }else{
+                nexImg=0;
+            }
+
+            //将当前图片试用绝对定位,下一张图片试用相对定位
+            $(".c-banner .banner ul img").eq(nexImg-1).css("position","absolute");
+            $(".c-banner .banner ul img").eq(nexImg).css("position","relative");
+
+            $(".c-banner .banner ul li").eq(nexImg).css("display","block");
+            $(".c-banner .banner ul li").eq(nexImg).stop().animate({"opacity":1},0);
+            $(".c-banner .banner ul li").eq(nexImg-1).stop().animate({"opacity":0},0,function(){
+                $(".c-banner .banner ul li").eq(nexImg-1).css("display","none");
+            });
+            $(".c-banner .jumpBtn ul li").css("background-color","white");
+            $(".c-banner .jumpBtn ul li[jumpImg="+nexImg+"]").css("background-color","black");
+        }
+
+        //轮播图底下按钮
+        //动态数据加载的试用应放在请求成功后执行该代码,否则按钮无法使用
+        $(".c-banner .jumpBtn ul li").each(function(){
+            //为每个按钮定义点击事件
+            $(this).click(function(){
+                clearInterval(time);
+                $(".c-banner .jumpBtn ul li").css("background-color","white");
+                jumpImg = $(this).attr("jumpImg");
+                if(jumpImg!=nexImg){
+                    var after =$(".c-banner .banner ul li").eq(jumpImg);
+                    var befor =$(".c-banner .banner ul li").eq(nexImg);
+
+                    //将当前图片试用绝对定位,下一张图片试用相对定位
+                    $(".c-banner .banner ul img").eq(nexImg).css("position","absolute");
+                    $(".c-banner .banner ul img").eq(jumpImg).css("position","relative");
+
+                    after.css("display","block");
+                    after.stop().animate({"opacity":1},1000);
+                    befor.stop().animate({"opacity":0},1000,function(){
+                        befor.css("display","none");
+                    });
+                    nexImg=jumpImg;
+                }
+                $(this).css("background-color","black");
+                time =setInterval(intervalImg,3000);
+            });
+        });
+    </script>
 </html>

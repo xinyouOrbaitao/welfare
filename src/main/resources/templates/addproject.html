@@ -1,33 +1,40 @@
 <!DOCTYPE>
 <html xmlns:th="http://www.thymeleaf.org">
-  <head>
+<head>
     <title>项目列表</title>
-    <link href="../static/css/font-awesome.min.css" rel="stylesheet" type="text/css"> 
-	<link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css">
- 	<link rel="stylesheet" type="text/css" href="../static/css/nav.css">
- 	<link rel="stylesheet" type="text/css" href="../static/css/addproject.css">		
-    <link href="../static/css/font-awesome.min.css" rel="stylesheet" type="text/css"> 
- 	<script src="../static/js/jquery-2.2.3.min.js"></script>
-    <script src="../static/js/bootstrap.min.js" ></script>
+    <link href="../static/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/nav.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/addproject.css">
+    <script src="../static/js/jquery-2.2.3.min.js"></script>
+    <script src="../static/js/bootstrap.min.js"></script>
     <script type="text/javascript">
-$(function(){
-	var t; 
-	$(".news").hover(function(){ 
-		 clearInterval(t);
-	},function(){ 
-		 t = setInterval(function(){ 
-				var ul = $(".list"); 
-				var liHeight = ul.find("li:last").height();
-				ul.animate({marginTop : liHeight +"px"},1000,function(){ 
-					ul.find("li:last").prependTo(ul);
-					ul.find("li:first").hide(); 
-					ul.css({marginTop:0}); 
-					ul.find("li:first").fadeIn(800); 
-				});         
-		},3000); 
-	 }).trigger("mouseleave"); 
-});
-function end(){
+        $(function () {
+            //图片上传
+            $('#upJQuery').on('click', function () {
+                var fd = new FormData();
+                fd.append("upload", 1);
+                fd.append("file", $("#upfile").get(0).files[0]);
+                $.ajax({
+                    url: "/file/upload",
+                    type: "POST",
+                    processData: false,
+                    contentType: false,
+                    data: fd,
+                    success: function (data) {
+                        var obj = JSON.parse(data);
+                        if (obj.code == "SUCCESS") {
+                            $("#wImage").val(obj.fileName);
+                            alert("上传成功");
+                        } else {
+                            alert("上传失败");
+                        }
+                    }
+                });
+            });
+        });
+
+        function end() {
             var endtime = $('#endTime').val();
             var starttime = $('#startTime').val();
             var start = new Date(starttime.replace("-", "/").replace("-", "/"));
@@ -38,82 +45,94 @@ function end(){
             }
             else {
                 return true;
-            }};
+            }
+        };
 
+        function add() {
+            var image = $("#wImage").val();
+            var wTitle = $("#wTitle").val();
+            var wContext = $("#wContext").val();
+            var wAmount = $("#wAmount").val();
+            var startTime = $("#startTime").val();
+            var endTime = $("#endTime").val();
+            var tag = $("#tag").val();
+            $.ajax({
+                url: "/welfare/add",
+                type: "POST",
+                dataType: "json",
+                contentType:"application/json;charset=utf-8",
+                data: JSON.stringify({
+                    "welfareName": wTitle,
+                    "welfareAccount": wAmount,
+                    "welfareTitle": wTitle,
+                    "startTime": startTime,
+                    "endTime": endTime,
+                    "context": wContext,
+                    "image": image,
+                    "tag": tag
+                }),
+                success: function (data) {
+                    console.log(data);
+                    debugger;
+                    if (data.code == "SUCCESS") {
+                        alert("创建成功");
+                        window.location.href = '/listinfo';
+                    } else {
+                        alert("创建失败");
+                    }
+                }
+            });
+        }
+    </script>
 
-</script>
-    
-  </head>
-  <style type="text/css">
+</head>
+<style type="text/css">
+
 </style>
 
-    
-  <body>
 
-    <div class="container">
-	    <div class="row col-xs-10 col-xs-offset-1">
-	    	<div class="row">
-	    		<ol class="breadcrumb" style="background: none;">
-				    <li><a href="/" class="text-a">首页</a></li>
-				    <li>添加活动</li>
-				</ol>
-	    	</div>
-	    	<div class="row rowtop" style="margin-top: -18px;">	
-		    	<div class="news">
-					<ul class="list">
-						<li>腾讯公益大数据揭秘：看看哪里爱心最爆棚？</li>
-						<li>垃圾分类从鼓励到强制，你准备好了吗？，你准备好了吗？你准备好了吗？重要的事情说三遍</li>
-						<li>爱无国度，救助来自第三世界的人们，他们需要你的帮助！</li>
-						<li>世界地球日 讲好我们的地球故事</li>
-						<li>99公益日 一起爱！</li>
-					</ul>
-				</div>
-	    	 		   
-	    	</div>
-	    	<div class="row">
-	    	<form action="">				
-					<div class="col-xs-10 col-xs-offset-1">	
-					<br>				 
-				        <div class="col-xs-5">
-				       		<div class="imgdiv">
-				       			<img src="" >
-				       		</div>
-				       		<br>
-				       		<p class="pull-right">
-				        		<button class="btn btn-success">添加图片</button>
-				            </p>
-				        </div>
-				        <div class="col-xs-7">
-				        						
-					        	<span>项目标题</span>
-					        	<input class="form-control" type="text" placeholder="请输入项目标题" required="required">	    
-					     	    <span>项目简介</span>
-					        	<textarea rows="3" cols="30" required="required"></textarea><br>
-					        	<span>募捐目标</span>
-								<input class="form-control" type="text" placeholder="请输入你的目标" required="required">
-								<span>项目起止时间 </span>
-								<p>
-									<input class="form-control left" type="date" required="required" id="startTime">
-									<span>至</span>
-									<input class="form-control right" type="date" required="required" id="endTime" onblur="end()">
-								</p>
+<body>
+<div th:replace="part/userhead :: a"></div>
+<div class="container">
+    <div class="row col-xs-10 col-xs-offset-1">
+        <div class="row">
+            <ol class="breadcrumb" style="background: none;">
+                <li><a href="/" class="text-a">首页</a></li>
+                <li>添加活动</li>
+            </ol>
+        </div>
 
-								<button class="btn btn-success pull-right">添加</button>
-				        </div>				        
-    				</div>
-    			</form>	  
-			</div>	
-		   
-	    </div>
-	</div>
- 	<footer>
-  		<div class="layout partner">
-			<div class="hd"><h2>联系我们</h2></div>
-			<div class="bd"></div>
-			<div class="text-center">@版权归XXX所有</div>
-	    </div>
-    </footer>
-  
+        <div class="row">
+            <div class="col-xs-10 col-xs-offset-1">
+                <br>
+                <div class="col-xs-7">
+                    <span>项目标题</span>
+                    <input class="form-control" type="text" id="wTitle" placeholder="请输入项目标题" required="required">
+                    <span>选择图片: <input type="file" id="upfile" name="upfile"/></span>
+                    <p><input type="submit" id="upJQuery" value="提交"/></p>
+                    <input type="hidden" id="wImage">
+                    <span>内容</span>
+                    <textarea rows="3" cols="30" required="required" id="wContext"></textarea><br>
+                    <span>募捐目标（金额）</span>
+                    <input class="form-control" type="text" id="wAmount" placeholder="请输入你需要的金额" required="required">
+                    <span>标签</span>
+                    <input class="form-control" type="text" id="tag" placeholder="请输入标签" required="required">
+                    <span>项目起止时间 </span>
+                    <p>
+                        <input class="form-control left" type="date" required="required" id="startTime">
+                        <span>至</span>
+                        <input class="form-control right" type="date" required="required" id="endTime"
+                               onblur="end()">
+                    </p>
+                    <button class="btn btn-success pull-right" id="formButton" onclick="add()">添加</button>
+                </div>
+            </div>
+        </div>
 
-  </body>
+    </div>
+</div>
+
+<div th:replace="part/footer :: a"></div>
+
+</body>
 </html>

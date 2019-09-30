@@ -1,5 +1,6 @@
 package com.welfare.service;
 
+import com.welfare.entity.UserAccountLogEntity;
 import com.welfare.entity.WelfareLogEntity;
 
 import java.util.List;
@@ -18,5 +19,14 @@ public interface WelfareLogService {
      * @return
      */
     public List<WelfareLogEntity> selectListByWelfareId(String welfareId);
+
+    /**
+     * 根据用户id查询用户捐赠记录
+     * @param userId
+     * @return
+     */
+    public List<WelfareLogEntity> selectListByUserId(String userId);
+
+    public List<UserAccountLogEntity> queryLog(String welfareId);
 
 }

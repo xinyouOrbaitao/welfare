@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -29,6 +30,10 @@ public class UserController {
     @Autowired
     private UserAccountService userAccountService;
 
+    /**
+     * 获取当前用户信息
+     * @return
+     */
     @RequestMapping(value = "/get", method = RequestMethod.POST)
     @ResponseBody
     public String get() {
@@ -38,6 +43,11 @@ public class UserController {
         return jsonObject.toString();
     }
 
+    /**
+     * 修改用户信息
+     * @param userEntity
+     * @return
+     */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
     public String update(UserEntity userEntity) {
@@ -47,6 +57,10 @@ public class UserController {
         return jsonObject.toString();
     }
 
+    /**
+     * 查询账户信息
+     * @return
+     */
     @RequestMapping(value = "/selectAccount", method = RequestMethod.POST)
     @ResponseBody
     public String selectAccount() {
@@ -67,9 +81,9 @@ public class UserController {
      */
     @RequestMapping(value = "/donate", method = RequestMethod.POST)
     @ResponseBody
-    public String donate(String welfareId, int amount) {
+    public String donate(String welfareId,String amount) {
         UserEntity userEntity = LoginAccountUtil.getUserEntity();
-        return userAccountService.donate(userEntity.getId(), welfareId, amount).toJSONString();
+        return userAccountService.donate(userEntity.getId(), welfareId,Integer.parseInt( amount)).toJSONString();
 
     }
 
@@ -97,7 +111,7 @@ public class UserController {
     @ResponseBody
     public String recharge(int amount) {
         UserEntity userEntity = LoginAccountUtil.getUserEntity();
-        return userAccountService.withdraw(userEntity.getId(), amount).toJSONString();
+        return userAccountService.recharge(userEntity.getId(), amount).toJSONString();
     }
 
     /**

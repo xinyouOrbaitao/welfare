@@ -22,6 +22,7 @@ public interface UserAccountLogDao extends MyMapper<UserAccountLogEntity> {
             @Result(property = "amount", column = "amount"),
             @Result(property = "welfareId", column = "welfare_id"),
             @Result(property = "welfareName", column = "welfare_name"),
+            @Result(property = "username", column = "username"),
             @Result(property = "createTime", column = "create_time")
 
     })
@@ -37,11 +38,29 @@ public interface UserAccountLogDao extends MyMapper<UserAccountLogEntity> {
             "</where>" +
             "</script>"
     )
-    public List<UserAccountLogEntity> selectListByState(@Param("state") Integer state, @Param("userId")long userId);
+    public List<UserAccountLogEntity> selectListByState(@Param("type") Integer type, @Param("userId")long userId);
+
+    @ResultMap(value = "queryAccountLog")
+    @Select("<script> " +
+            "select * from user_account_log " +
+            "<where>" +
+            "<if test = 'type!=null and type!=0 '> " +
+            " and type = #{type,jdbcType=INTEGER}" +
+            "</if>" +
+            "<if test = 'welfareId!=null '> " +
+            " and welfare_id = #{welfareId,jdbcType=VARCHAR}" +
+            "</if>" +
+            "</where>" +
+            "</script>"
+    )
+    public List<UserAccountLogEntity> selectListByWelfareId(@Param("type") Integer type, @Param("welfareId")String welfareId);
 
     @Select("SELECT SUM(amount) FROM user_account_log WHERE type = 2 ")
     public Integer selectTotalAmount();
 
     @Select("SELECT count(*) FROM user_account_log WHERE type = 2 ")
     public Integer selectTotalPeople();
+
+    @Select("SELECT count(*) FROM user_account_log WHERE welfare_id = #{id,jdbcType=VARCHAR} ")
+    public Integer selectTotalPeopleByWelfate(@Param("id")String  id);
 }

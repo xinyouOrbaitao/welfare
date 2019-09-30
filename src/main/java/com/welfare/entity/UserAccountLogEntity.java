@@ -1,6 +1,7 @@
 package com.welfare.entity;
 
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Date;
 
 /**
  * @Author ：chenxinyou.
@@ -10,12 +11,22 @@ import javax.persistence.Table;
  */
 @Table(name = "user_account_log")
 public class UserAccountLogEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Column(name = "user_id")
     private long userId;
+    @Column(name = "username")
+    private String username;
+    @Column(name = "type")
     private String type;
+    @Column(name = "amount")
     private long amount;
-    private long createTime;
+    @Column(name = "creat_time")
+    private Date createTime;
+    @Column(name = "welfare_id")
     private String welfareId;
+    @Column(name = "welfare_name")
     private String welfareName;
 
     public long getId() {
@@ -50,11 +61,11 @@ public class UserAccountLogEntity {
         this.amount = amount;
     }
 
-    public long getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(long createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
@@ -72,5 +83,13 @@ public class UserAccountLogEntity {
 
     public void setWelfareName(String welfareName) {
         this.welfareName = welfareName;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

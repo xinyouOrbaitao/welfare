@@ -100,16 +100,23 @@
 
 </style>
 <script>
-    function recharge(){
+    function withdraw(){
         var formData = new FormData();
         var amount = $("#amount").val();
+        var money = $("#money").text();
         formData.append("amount",amount);
         if(!amount){
-            alert("请输入充值金额");
+            alert("请输入提现金额");
+            return;
+        }
+        debugger;
+
+        if(amount>money){
+            alert("提款金额不能大于余额！");
             return;
         }
         $.ajax({
-            url: "/user/recharge",
+            url: "/user/withdraw",
             type: "POST",
             dataType: "json",
             contentType:false,
@@ -118,7 +125,7 @@
             success: function (data) {
                 console.log(data);
                 if (data.code == "SUCCESS") {
-                    alert("充值成功");
+                    alert("提现成功");
                     window.location.href = '/account';
                 } else {
                     alert(data.msg);
@@ -138,18 +145,17 @@
         <div class="col-xs-8 col-xs-offset-2">
             <div class="title" >
                 <span  id = "welfareTitle">账号余额</span>
-                <span  id="money" th:text="${userAccountEntity.getMoney()}">
-	   				</span>
+                <span  id="money"  th:text="${userAccountEntity.getMoney()}" th:value="${userAccountEntity.getMoney()}"> </span>
             </div>
             <div class="content">
                 <p th:text="${user.username}"></p>
                 <p>
-                    <span >充值金额：</span>
+                    <span >提现金额：</span>
                     <input type="number" id="amount" step="20" min="20">
                 </p>
                 <hr class="divider">
                 <div class="pay paystyle"><input type="radio" name="pay1" value="2" checked="checked">快捷支付<img src="../static/img/js.jpg"></div>
-                <button type="button" onclick="recharge()" class="btn btn-success">确认支付</button>
+                <button type="button" onclick="withdraw()" class="btn btn-success">确认支付</button>
             </div>
         </div>
     </div>
