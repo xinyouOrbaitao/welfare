@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.welfare.dao.*;
 import com.welfare.entity.*;
+import com.welfare.service.BumoService;
 import com.welfare.service.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,8 @@ public class UserAccountServiceImpl implements UserAccountService {
     @Autowired
     private WelfareLogDao welfareLogDao;
 
+    @Autowired
+    private BumoService bumoService;
     /**
      * 充值功能
      * 1.余额增加
@@ -60,6 +63,8 @@ public class UserAccountServiceImpl implements UserAccountService {
         userAccountLogEntity.setCreateTime(new Date());
         userAccountLogEntity.setType("1");
         userAccountLogEntity.setUserId(userId);
+        String hash = bumoService.recharge(userId,amount);
+        userAccountLogEntity.setHash(hash);
         userAccountLogDao.insertSelective(userAccountLogEntity);
         jsonObject.put("code", "SUCCESS");
         jsonObject.put("msg", "充值成功");
@@ -95,6 +100,8 @@ public class UserAccountServiceImpl implements UserAccountService {
             userAccountLogEntity.setCreateTime(new Date());
             userAccountLogEntity.setType("3");
             userAccountLogEntity.setUserId(userId);
+            String hash = bumoService.withdraw(userId,amount);
+            userAccountLogEntity.setHash(hash);
             userAccountLogDao.insertSelective(userAccountLogEntity);
             jsonObject.put("code", "SUCCESS");
             jsonObject.put("msg", "提现成功");
@@ -136,6 +143,7 @@ public class UserAccountServiceImpl implements UserAccountService {
         JSONObject jsonObject = new JSONObject();
         WelfareEntity welfareEntity = welfareDao.selectWelfareOne(welfareId);
         UserAccountEntity userAccountEntity = userAccountDao.selectByUserId(userId);
+        UserAccountEntity toUserEntity = userAccountDao.selectByUserId(Long.parseLong(welfareEntity.getWelfareSponsor()));
         if (StringUtils.isEmpty(userAccountEntity)) {
             jsonObject.put("code", "error");
             jsonObject.put("msg", "账号余额不足");
@@ -152,7 +160,9 @@ public class UserAccountServiceImpl implements UserAccountService {
         long userMoney = userAccountEntity.getMoney();
         if (userMoney > amount) {
             long balance = userMoney - amount;
+            long toBalance = toUserEntity.getMoney()+amount;
             userAccountDao.updateUserAccount(balance, userId);
+            userAccountDao.updateUserAccount(toBalance, toUserEntity.getUserId());
             UserAccountLogEntity userAccountLogEntity = new UserAccountLogEntity();
             userAccountLogEntity.setAmount(amount);
             userAccountLogEntity.setCreateTime(new Date());
@@ -161,6 +171,8 @@ public class UserAccountServiceImpl implements UserAccountService {
             userAccountLogEntity.setType("2");
             userAccountLogEntity.setUsername(userEntity.getUsername());
             userAccountLogEntity.setUserId(userId);
+            String hash = bumoService.sendBu(userId,toUserEntity.getUserId(),amount);
+            userAccountLogEntity.setHash(hash);
             userAccountLogDao.insertSelective(userAccountLogEntity);
             long total = welfareEntity.getWelfareActualAccount() + amount;
             welfareDao.updateWelfareAccount(welfareEntity.getId(), total);

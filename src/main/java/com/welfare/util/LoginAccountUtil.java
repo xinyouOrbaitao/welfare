@@ -17,10 +17,11 @@ public class LoginAccountUtil {
     public static UserEntity getUserEntity() {
         UserEntity loginAccount = loginAccountInfo.get();
         if (loginAccount == null) {
+            //todo 测试代码
             loginAccount = new UserEntity();
             loginAccount.setId(11);
             loginAccount.setUsername("qwe");
-
+            loginAccount.setRole("2");
             return loginAccount;
 //            return null;
         }

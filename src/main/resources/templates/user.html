@@ -20,6 +20,7 @@
 	                <li id="li3"><a href="/donateLog">我的捐款记录</a></li>
 	                <li id="li4"><a href="/update/userview">修改个人信息</a></li>
 	                <li id="li2"><a href="/account">账户</a></li>
+					<li id="li5" th:if="${user.role=='2'}"><a href="/adminlistinfo">审核</a></li>
 	            </ul>
 	        </div>
 	        <div class="col-xs-9 right">

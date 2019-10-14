@@ -595,7 +595,7 @@ public class BumoTest extends WelfareTest {
 
 
     /**
-     * Set account metadata
+     * 设置帐户元数据
      */
     @Test
     public void setAccountMetadata() {
@@ -634,7 +634,7 @@ public class BumoTest extends WelfareTest {
     }
 
     /**
-     * Set account privilege
+     * 设置帐户权限
      */
     @Test
     public void setAccountPrivilege() {
@@ -672,7 +672,7 @@ public class BumoTest extends WelfareTest {
     }
 
     /**
-     * Issue asset
+     * 发行资产
      */
     @Test
     public void issueAsset() {
@@ -715,7 +715,7 @@ public class BumoTest extends WelfareTest {
     }
 
     /**
-     * Send asset
+     * 发送资产
      */
     @Test
     public void sendAsset() {
@@ -761,29 +761,35 @@ public class BumoTest extends WelfareTest {
     }
 
     /**
-     * Send a transaction of sending bu
+     * 发送交易
      */
     @Test
     public void sendBu() {
         SDK sdk = SDK.getInstance("http://10.100.12.129:26002");
         // Init variable
-        // The account private key to send bu
+        // 发送交易账号的私钥
         String senderPrivateKey = "privbvXJsPiG1ip5UZftpAMJ2icjsNt1DoW6X8uY4MNew9HMXscsYGLV";
         // The account address to receive bu
+        // 接受账号的地址
         String destAddress = "buQoBhEpLcUVypAQMiBKFAGJD1b4yd6b8qrQ";
         // The amount to be sent
+        // 发送多少币
         Long amount = ToBaseUnit.BU2MO("10001");
         // The fixed write 1000L, the unit is MO
+        // 手续费
         Long gasPrice = 1000L;
         // Set up the maximum cost 0.01BU
         Long feeLimit = ToBaseUnit.BU2MO("0.01");
         // Transaction initiation account's nonce + 1
+        //交易发起账户的现时数+ 1
         Long nonce = 28L;
 
         // 1. Get the account address to send this transaction
+        //获取帐户地址以发送此交易
         String senderAddresss = getAddressByPrivateKey(senderPrivateKey);
 
         // 2. Build sendBU
+        //构建发送账号
         BUSendOperation operation = new BUSendOperation();
         operation.setSourceAddress(senderAddresss);
         operation.setDestAddress(destAddress);
@@ -802,6 +808,7 @@ public class BumoTest extends WelfareTest {
 
     /**
      * Write logs to the BU block chain
+     * 将日志写入BU块链
      */
     @Test
     public void createLog() {
@@ -955,12 +962,6 @@ public class BumoTest extends WelfareTest {
      */
     private String getAddressByPrivateKey(String privatekey) {
         String publicKey = PrivateKey.getEncPublicKey(privatekey);
-        String address = PrivateKey.getEncAddress(publicKey);
-        return address;
-    }
-
-    private String getPrivateKey(String privatekey) {
-        String publicKey = PrivateKey.getEncAddress(privatekey);
         String address = PrivateKey.getEncAddress(publicKey);
         return address;
     }

@@ -13,7 +13,21 @@
   </head>
   
   <body>
-  <div th:replace="part/userhead :: a"></div>
+  	<div class="navbar navbar-default navbar-fixed-top">
+        <div class="navbar-header">
+           　        		<a href="/" class="navbar-brand">爱心公益网 </a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li><a href="/">公益首页</a></li>
+            <li><a href="/listinfo">公益活动</a></li>
+            <li><a href="/user">个人中心</a></li>
+            <li><a href="/add">我要求助</a></li>
+        </ul>
+
+        <div class="navbar-right text-danger">
+        	欢迎，<span></span>登录&nbsp;|&nbsp;<span><a class="text-danger">注销</a></span>
+        </div>
+    </div>
     <div class="container">
 	    <div class="row col-xs-10 col-xs-offset-1">
 	    	<div class="row">
@@ -22,8 +36,18 @@
 				    <li><a href="#">项目列表</a></li>
 				</ol>
 	    	</div>
-
-	    	<div class="row">			
+			<div class="row rowtop" >
+				项目状态:
+				<!-- select选中状态未改变 -->
+				<select onchange="select()" id="selectId" class="selector">
+					<option value="0">全部</option>
+					<option value="1">发起</option>
+					<option value="2">筹款中</option>
+					<option value="3">等待结算</option>
+					<option value="4">结束</option>
+				</select>
+			</div>
+	    	<div class="row">
 					<div class="media"  th:each="entity:${list.list}">
 					<br>				 
 				        <a class="pull-left fixedimg" th:href="@{/welfare/detail/{id}(id=${entity.id})}">
@@ -54,8 +78,7 @@
 							</div>
 							<div class="rightmedia">
 								<div class="small">
-								
-									<p>		
+									<p>
 										<!-- 项目状态 -->							
 										<span class="text-muted">项目状态:&nbsp;</span>
 										<span th:if="${entity.state ==1}">发起</span>
@@ -80,8 +103,10 @@
 									</div>
 									<!-- 进度条数字 -->
 									<span class="text-muted number" th:text="${entity.ratio}">100%</span>
-								   
-									<a class="btn btn-success btn-sm" th:href="@{/donation/{id}(id=${entity.id})}">我要参与</a>
+									<span th:if="${entity.state ==1}">
+										<a class="btn btn-success btn-sm" th:href="@{/review/{id}(id=${entity.id})}">审核</a>
+									</span>
+
 								</div>
 							</div>
 				        </div>				        
@@ -93,8 +118,9 @@
     				<!-- 重复重复 -->
     				<!-- 分页导航 -->
     				<ul class="pager">
-					    <li><a th:href="@{/listinfo?pageNo={pageNo}(pageNo=${list.prePage})}">«上一页</a></li>
-					    <li><a th:href="@{/listinfo?pageNo={pageNo}(pageNo=${list.nextPage})}">下一页»</a></li>
+
+					    <li><a href="javascript:;" th:onclick="'javascript:next(\''+${list.prePage}+'\')'" >«上一页</a></li>
+					    <li><a href="javascript:;" th:onclick="'javascript:next(\''+${list.nextPage}+'\')'" >下一页»</a></li>
 					</ul>
 			</div>
 	    
@@ -103,4 +129,16 @@
 	</div>
 	<div th:replace="part/footer :: a"></div>
   </body>
+
+  <script>
+      function select(){
+          var type = $("#selectId").val();
+          window.location.href='/adminlistinfo?type='+type;
+      }
+
+      function next(pageNo){
+          var type = $("#selectId").val();
+          window.location.href='/adminlistinfo?type='+type+'&pageNo='+pageNo;
+      }
+  </script>
 </html>

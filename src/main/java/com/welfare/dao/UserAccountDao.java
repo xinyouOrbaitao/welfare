@@ -16,11 +16,11 @@ public interface UserAccountDao extends MyMapper<UserAccountEntity> {
 
     @Results(id = "queryUserAccount", value = {
             @Result(property = "id", column = "id"),
-            @Result(property = "user_id", column = "userId"),
+            @Result(property = "userId", column = "user_id"),
             @Result(property = "money", column = "money"),
             @Result(property = "code", column = "code")
     })
-    @Select("select * from user_account where user_id =#{userId,jdbcType=VARCHAR}")
+    @Select("select id,user_id , money, code from user_account where user_id =#{userId,jdbcType=INTEGER}")
     UserAccountEntity selectByUserId(long userId);
 
     @Update("update user_account set money = #{money,jdbcType=INTEGER} where user_id =#{userId}")

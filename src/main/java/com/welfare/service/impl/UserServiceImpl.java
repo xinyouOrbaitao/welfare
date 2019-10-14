@@ -2,9 +2,11 @@ package com.welfare.service.impl;
 
 import com.welfare.dao.UserAccountDao;
 import com.welfare.dao.UserDao;
+import com.welfare.entity.BumoEntity;
 import com.welfare.entity.UserAccountEntity;
 import com.welfare.entity.UserAccountLogEntity;
 import com.welfare.entity.UserEntity;
+import com.welfare.service.BumoService;
 import com.welfare.service.UserService;
 import com.welfare.util.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +28,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserAccountDao userAccountDao;
-
+    @Autowired
+    private BumoService bumoService;
     @Override
     public String register(String username, String password, String phone) {
         if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password) || StringUtils.isEmpty(phone)) {
@@ -39,11 +42,13 @@ public class UserServiceImpl implements UserService {
         entity.setPhone(phone);
         int result = userDao.insertSelective(entity);
         entity = userDao.queryOne(username);
-        //TODO 调用布比接口，生成用户账号code
+        //调用布比接口，生成用户账号
+        BumoEntity bumoEntity = bumoService.createAccount(entity.getId());
         UserAccountEntity userAccountEntity = new UserAccountEntity();
         userAccountEntity.setUserId(entity.getId());
+
         userAccountEntity.setMoney(0);
-        userAccountEntity.setCode("");
+        userAccountEntity.setCode(bumoEntity.getTxHash());
         userAccountDao.insert(userAccountEntity);
         return "SUCCESS";
     }

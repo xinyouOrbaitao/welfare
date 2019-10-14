@@ -21,7 +21,7 @@ public interface WelfareDao extends MyMapper<WelfareEntity> {
      * @param state
      * @return
      */
-    @Update("update welfate set state = #{state,jdbcType=VARCHAR} where id =  #{welfareId,jdbcType=VARCHAR}")
+    @Update("update welfare set state = #{state,jdbcType=VARCHAR} where id =  #{welfareId,jdbcType=VARCHAR}")
     public int updateStatus(@Param("welfareId") String welfareId, @Param("state") String state);
 
     @Results(id = "query", value = {

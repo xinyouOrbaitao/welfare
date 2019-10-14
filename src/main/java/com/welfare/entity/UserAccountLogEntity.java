@@ -28,6 +28,16 @@ public class UserAccountLogEntity {
     private String welfareId;
     @Column(name = "welfare_name")
     private String welfareName;
+    @Column(name = "hash")
+    private String hash;
+
+    public String getHash() {
+        return hash;
+    }
+
+    public void setHash(String hash) {
+        this.hash = hash;
+    }
 
     public long getId() {
         return id;

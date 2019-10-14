@@ -13,18 +13,10 @@ import io.bumo.crypto.Keypair;
 import io.bumo.crypto.protobuf.Chain;
 import io.bumo.encryption.key.PrivateKey;
 import io.bumo.encryption.utils.hex.HexFormat;
-import io.bumo.model.request.AccountGetNonceRequest;
-import io.bumo.model.request.TransactionBuildBlobRequest;
-import io.bumo.model.request.TransactionSignRequest;
-import io.bumo.model.request.TransactionSubmitRequest;
-import io.bumo.model.request.operation.AccountActivateOperation;
-import io.bumo.model.request.operation.AccountSetMetadataOperation;
-import io.bumo.model.request.operation.AssetIssueOperation;
-import io.bumo.model.request.operation.BaseOperation;
-import io.bumo.model.response.AccountGetNonceResponse;
-import io.bumo.model.response.TransactionBuildBlobResponse;
-import io.bumo.model.response.TransactionSignResponse;
-import io.bumo.model.response.TransactionSubmitResponse;
+import io.bumo.model.request.*;
+import io.bumo.model.request.operation.*;
+import io.bumo.model.response.*;
+import io.bumo.model.response.result.AccountGetBalanceResult;
 import io.bumo.model.response.result.TransactionBuildBlobResult;
 import io.bumo.model.response.result.data.Signature;
 import org.slf4j.Logger;
@@ -32,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 /**
  * @Author ：chenxinyou.
@@ -58,9 +51,8 @@ public class BumoServiceImpl implements BumoService {
      * 创建新的用户，并激活
      */
     @Override
-    public void createAccount(long userId) {
+    public BumoEntity createAccount(long userId) {
         BumoEntity bumoEntity = new BumoEntity();
-
         Long initBalance = ToBaseUnit.BU2MO("1000");
         // 固定写入1000L，单位为MO
         Long gasPrice = 1000L;
@@ -97,122 +89,110 @@ public class BumoServiceImpl implements BumoService {
             bumoEntity.setTxHash(txHash);
             bumoDao.insertSelective(bumoEntity);
         }
+        return bumoEntity;
     }
 
     /**
-     * 组装发行资产操作
+     * 转账
+     *
+     * @param fromUserId
+     * @param toUserId
+     * @param amount
      * @return
      */
-    public BaseOperation[] buildOperations() {
-        // The account address to issue apt1.0 token
-        String issuerAddress = "";
-        // The token name
-        String name = "Global";
-        // The token code
-        String code = "GLA";
-        // The apt token version
-        String version = "1.0";
-        // The apt token icon
-        String icon = "";
-        // The token total supply number
-        Long totalSupply = 1000000000L;
-        // The token now supply number
-        Long nowSupply = 1000000000L;
-        // The token description
-        String description = "GLA TOKEN";
-        // The token decimals
-        Integer decimals = 0;
-
-        // Build asset issuance operation
-        AssetIssueOperation assetIssueOperation = new AssetIssueOperation();
-        assetIssueOperation.setSourceAddress(issuerAddress);
-        assetIssueOperation.setCode(code);
-        assetIssueOperation.setAmount(nowSupply);
-
-        // If this is an atp 1.0 token, you must set metadata like this
-        JSONObject atp10Json = new JSONObject();
-        atp10Json.put("name", name);
-        atp10Json.put("code", code);
-        atp10Json.put("description", description);
-        atp10Json.put("decimals", decimals);
-        atp10Json.put("totalSupply", totalSupply);
-        atp10Json.put("icon", icon);
-        atp10Json.put("version", version);
-
-        String key = "asset_property_" + code;
-        String value = atp10Json.toJSONString();
-        // Build setMetadata
-        AccountSetMetadataOperation accountSetMetadataOperation = new AccountSetMetadataOperation();
-        accountSetMetadataOperation.setSourceAddress(issuerAddress);
-        accountSetMetadataOperation.setKey(key);
-        accountSetMetadataOperation.setValue(value);
-
-        BaseOperation[] operations = {assetIssueOperation, accountSetMetadataOperation};
-        return operations;
+    @Override
+    public String sendBu(long fromUserId, long toUserId, int amount) {
+        BumoEntity fromEntity = bumoDao.selectByUserId(fromUserId);
+        BumoEntity toEntity = bumoDao.selectByUserId(toUserId);
+        if (StringUtils.isEmpty(fromEntity) || StringUtils.isEmpty(toEntity)) {
+            return "";
+        }
+        return sendBu(fromEntity.getPrivateKey(), toEntity.getAddress(), amount);
     }
 
-    public String seralizeTransaction(Long nonce,  BaseOperation[] operations) {
-        String transactionBlob = null;
-
-        // The account address to issue atp1.0 token
-        String senderAddresss = "";
-        // The gasPrice is fixed at 1000L, the unit is MO
+    @Override
+    public void queryAccount(long userId){
+        BumoEntity fromEntity = bumoDao.selectByUserId(userId);
+        AccountGetBalanceRequest request = new AccountGetBalanceRequest();
+        request.setAddress(fromEntity.getAddress());
+        // Call getBalance
+        AccountGetBalanceResponse response = sdk.getAccountService().getBalance(request);
+        if (0 == response.getErrorCode()) {
+            AccountGetBalanceResult result = response.getResult();
+            logger.info("BU余额：" + ToBaseUnit.MO2BU(result.getBalance().toString()) + " BU");
+        } else {
+            logger.info("error: " + response.getErrorDesc());
+        }
+    }
+    public String sendBu(String senderPrivateKey, String destAddress, int buAmount) {
+        // Init variable
+        // The amount to be sent
+        // 发送多少币
+        Long amount = ToBaseUnit.BU2MO(String.valueOf(buAmount));
+        // The fixed write 1000L, the unit is MO
+        // 手续费
         Long gasPrice = 1000L;
-        // Set up the maximum cost 50.03BU
-        Long feeLimit = ToBaseUnit.BU2MO("50.03");
-        // Nonce should add 1
-        nonce += 1;
+        // Set up the maximum cost 0.01BU
+        Long feeLimit = ToBaseUnit.BU2MO("0.01");
 
-        // Build transaction  Blob
-        TransactionBuildBlobRequest transactionBuildBlobRequest = new TransactionBuildBlobRequest();
-        transactionBuildBlobRequest.setSourceAddress(senderAddresss);
-        transactionBuildBlobRequest.setNonce(nonce);
-        transactionBuildBlobRequest.setFeeLimit(feeLimit);
-        transactionBuildBlobRequest.setGasPrice(gasPrice);
-        for (int i = 0; i < operations.length; i++) {
-            transactionBuildBlobRequest.addOperation(operations[i]);
+        // 1. Get the account address to send this transaction
+        //获取帐户地址以发送此交易
+        String senderAddresss = getAddressByPrivateKey(senderPrivateKey);
+
+        //交易发起账户的现时数+ 1
+        // Transaction initiation account's nonce + 1
+        Long nonce = getNonce(senderAddresss) + 1;
+        // 2. Build sendBU
+        //构建发送账号
+        BUSendOperation operation = new BUSendOperation();
+        operation.setSourceAddress(senderAddresss);
+        operation.setDestAddress(destAddress);
+        operation.setAmount(amount);
+
+        String[] signerPrivateKeyArr = {senderPrivateKey};
+        // Record txhash for subsequent confirmation of the real result of the transaction.
+        // After recommending five blocks, call again through txhash `Get the transaction information
+        // from the transaction Hash'(see example: getTxByHash ()) to confirm the final result of the transaction
+        String txHash = submitTransaction(signerPrivateKeyArr, senderAddresss, operation, nonce, gasPrice, feeLimit);
+        if (txHash != null) {
+            logger.info("hash: " + txHash);
+            return txHash;
         }
-        TransactionBuildBlobResponse transactionBuildBlobResponse = sdk.getTransactionService().buildBlob(transactionBuildBlobRequest);
-        if (transactionBuildBlobResponse.getErrorCode() == 0) {
-            transactionBlob = transactionBuildBlobResponse. getResult().getTransactionBlob();
-        } else {
-            System.out.println("error: " + transactionBuildBlobResponse.getErrorDesc());
-        }
-        return transactionBlob;
+        return "";
     }
 
-    public Signature[] signTransaction(String transactionBlob) {
-        Signature[] signatures = null;
-        // The account private key to issue atp1.0 token
-        String senderPrivateKey = "";
-
-        // Sign transaction BLob
-        TransactionSignRequest transactionSignRequest = new TransactionSignRequest();
-        transactionSignRequest.setBlob(transactionBlob);
-        transactionSignRequest.addPrivateKey(senderPrivateKey);
-        TransactionSignResponse transactionSignResponse = sdk.getTransactionService().sign(transactionSignRequest);
-        if (transactionSignResponse.getErrorCode() == 0) {
-            signatures = transactionSignResponse.getResult().getSignatures();
-        } else {
-            System.out.println("error: " + transactionSignResponse.getErrorDesc());
+    /**
+     * 充值
+     *
+     * @param userId
+     * @param amount
+     * @return
+     */
+    @Override
+    public String recharge(long userId, int amount) {
+        BumoEntity userEntity = bumoDao.selectByUserId(userId);
+        if (StringUtils.isEmpty(userEntity)) {
+            return "";
         }
-        return signatures;
+        return sendBu(creationPrivateKey, userEntity.getAddress(), amount);
     }
 
-    public String submitTransaction(String transactionBlob, Signature[] signatures) {
-        String  hash = null;
-        // Submit transaction
-        TransactionSubmitRequest transactionSubmitRequest = new TransactionSubmitRequest();
-        transactionSubmitRequest.setTransactionBlob(transactionBlob);
-        transactionSubmitRequest.setSignatures(signatures);
-        TransactionSubmitResponse transactionSubmitResponse = sdk.getTransactionService().submit(transactionSubmitRequest);
-        if (0 == transactionSubmitResponse.getErrorCode()) {
-            hash = transactionSubmitResponse.getResult().getHash();
-        } else {
-            System.out.println("error: " + transactionSubmitResponse.getErrorDesc());
+    /**
+     * 提现
+     *
+     * @param userId
+     * @param amount
+     * @return
+     */
+    @Override
+    public String withdraw(long userId, int amount) {
+        BumoEntity userEntity = bumoDao.selectByUserId(userId);
+        if (StringUtils.isEmpty(userEntity)) {
+            return "";
         }
-        return  hash ;
+        return sendBu(userEntity.getPrivateKey(), creationAddress, amount);
     }
+
     /**
      * @param senderPrivateKeys The account private keys to sign transaction
      * @param senderAddresss    The account address to start transaction

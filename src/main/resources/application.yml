@@ -44,7 +44,7 @@ welfare:
   cookie:
     encryptKey: 168367766d874d98870c8ce618942f48
   bumo:
-    url: http://10.100.12.129:36002
+    url: http://10.100.12.129:26002
     address: buQtLqpEo4XHPXXoncVBy6E2vcrCNFkGbYXm
     privateKey: privbvXJsPiG1ip5UZftpAMJ2icjsNt1DoW6X8uY4MNew9HMXscsYGLV
   file:

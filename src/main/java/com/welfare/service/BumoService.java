@@ -1,5 +1,6 @@
 package com.welfare.service;
 
+import com.welfare.entity.BumoEntity;
 import io.bumo.model.response.result.AccountCreateResult;
 
 /**
@@ -14,6 +15,10 @@ public interface BumoService {
      * 创建账号并激活
      * @return
      */
-    public void createAccount(long userId);
+    public BumoEntity createAccount(long userId);
+    public String sendBu(long fromUserId, long toUserId, int amount);
+    public String recharge(long userId,int amount);
+    public String withdraw(long userId,int amount);
 
+    public void queryAccount(long userId);
 }

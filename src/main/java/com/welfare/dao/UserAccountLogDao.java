@@ -23,7 +23,8 @@ public interface UserAccountLogDao extends MyMapper<UserAccountLogEntity> {
             @Result(property = "welfareId", column = "welfare_id"),
             @Result(property = "welfareName", column = "welfare_name"),
             @Result(property = "username", column = "username"),
-            @Result(property = "createTime", column = "create_time")
+            @Result(property = "createTime", column = "create_time"),
+            @Result(property = "hash", column = "hash")
 
     })
     @Select("<script> " +
@@ -62,5 +63,5 @@ public interface UserAccountLogDao extends MyMapper<UserAccountLogEntity> {
     public Integer selectTotalPeople();
 
     @Select("SELECT count(*) FROM user_account_log WHERE welfare_id = #{id,jdbcType=VARCHAR} ")
-    public Integer selectTotalPeopleByWelfate(@Param("id")String  id);
+    public Integer selectTotalPeopleByWelfare(@Param("id")String  id);
 }

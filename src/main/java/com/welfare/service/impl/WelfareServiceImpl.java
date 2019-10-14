@@ -163,7 +163,7 @@ public class WelfareServiceImpl implements WelfareService {
      */
     @Override
     public int welfarePeopleSize(String id) {
-        Integer total = userAccountLogDao.selectTotalPeopleByWelfate(id);
+        Integer total = userAccountLogDao.selectTotalPeopleByWelfare(id);
         if (total == null) {
             return 0;
         }

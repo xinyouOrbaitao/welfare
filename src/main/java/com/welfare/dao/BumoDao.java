@@ -15,13 +15,13 @@ import org.apache.ibatis.annotations.Select;
 public interface BumoDao extends MyMapper<BumoEntity> {
     @Results(id = "queryBumo", value = {
             @Result(property = "id", column = "id"),
-            @Result(property = "user_id", column = "userId"),
+            @Result(property = "userId", column = "user_id"),
             @Result(property = "address", column = "address"),
             @Result(property = "publicKey", column = "publicKey"),
             @Result(property = "txHash", column = "txHash"),
             @Result(property = "privateKey", column = "privateKey")
     })
-    @Select("select * from bomo where user_id =#{userId,jdbcType=VARCHAR}")
+    @Select("select * from bumo where user_id =#{userId,jdbcType=VARCHAR}")
     BumoEntity selectByUserId(long userId);
 
 }
