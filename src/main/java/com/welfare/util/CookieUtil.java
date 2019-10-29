@@ -37,7 +37,7 @@ public class CookieUtil {
         String tokenStr = userEntity.getUsername() + tokenSep + userEntity.getEmail() + tokenSep + userEntity.getRole();
         String token = AesUtil.encrypt(tokenStr, CookieConfig.cookieEncryptKey);
         addCookie(response, SystemConstants.LOGIN_TOKEN, token, true);
-
+        LoginAccountUtil.setUserEntity(userEntity);
         /*
             设置登录标示，前端使用
          */

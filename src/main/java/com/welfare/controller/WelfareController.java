@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -51,9 +52,9 @@ public class WelfareController {
 
     @RequestMapping(value = "/selectByUser", method = RequestMethod.POST)
     @ResponseBody
-    public String select(PageParam pageParam) {
+    public String select(PageParam pageParam, HttpServletRequest request) {
         JSONObject jsonObject = new JSONObject();
-        UserEntity userEntity = LoginAccountUtil.getUserEntity();
+        UserEntity userEntity = LoginAccountUtil.getUserEntity(request);
         if (StringUtils.isEmpty(userEntity)) {
             jsonObject.put("code", "error");
             jsonObject.put("msg", "请登录");
@@ -66,9 +67,9 @@ public class WelfareController {
 
     @RequestMapping(value = "/selectLog", method = RequestMethod.POST)
     @ResponseBody
-    public String selectLog(String welfareId) {
+    public String selectLog(String welfareId,HttpServletRequest request) {
         JSONObject jsonObject = new JSONObject();
-        UserEntity userEntity = LoginAccountUtil.getUserEntity();
+        UserEntity userEntity = LoginAccountUtil.getUserEntity(request);
         if (StringUtils.isEmpty(userEntity)) {
             jsonObject.put("code", "error");
             jsonObject.put("msg", "请登录");

@@ -42,7 +42,7 @@
 								<br>
 								<div class="small">									
 										<span class="text-muted">筹款目标&nbsp;|&nbsp;</span>
-										<span th:text="${entity.welfareAccount}">400000</span>元
+										<span th:text="${entity.welfareAccount}">0</span>元
 										<br>
 										<span class="text-muted" >筹款时间&nbsp;|&nbsp;</span>
 										<span  th:text="${#dates.format(entity.startTime,'yyyy-MM-dd HH:mm:ss')}">--</span>
@@ -67,7 +67,8 @@
 									<p class="left">
 										<!-- 已筹元数或件数 -->
 										<span class="text-muted">已筹:&nbsp;</span>
-										<span class="text-red">53601.61元</span>
+										<span class="text-red"th:text="${entity.welfareActualAccount}">0</span>
+										<span class="text-red">元</span>
 									</p>
 									<p class="right text-right">
 										<!-- 捐款 人次-->

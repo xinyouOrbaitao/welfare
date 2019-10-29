@@ -3,6 +3,8 @@ package com.welfare.util;
 
 import com.welfare.entity.UserEntity;
 
+import javax.servlet.http.HttpServletRequest;
+
 public class LoginAccountUtil {
     private static final ThreadLocal<UserEntity> loginAccountInfo = new ThreadLocal<>();
 
@@ -14,16 +16,15 @@ public class LoginAccountUtil {
         loginAccountInfo.remove();
     }
 
-    public static UserEntity getUserEntity() {
+    public static UserEntity getUserEntity(HttpServletRequest request) {
         UserEntity loginAccount = loginAccountInfo.get();
         if (loginAccount == null) {
-            //todo 测试代码
-            loginAccount = new UserEntity();
-            loginAccount.setId(11);
-            loginAccount.setUsername("qwe");
-            loginAccount.setRole("2");
-            return loginAccount;
-//            return null;
+            try {
+                return CookieUtil.getLoginAccountFromCookie(request);
+            }catch (Exception e){
+
+            }
+            return null;
         }
         return loginAccount;
     }

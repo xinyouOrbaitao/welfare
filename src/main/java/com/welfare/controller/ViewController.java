@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletRequest;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,8 +46,8 @@ public class ViewController {
      * @return
      */
     @RequestMapping("/user")
-    public String user(Model modelMap) {
-        UserEntity userEntity = LoginAccountUtil.getUserEntity();
+    public String user(Model modelMap, HttpServletRequest request) {
+        UserEntity userEntity = LoginAccountUtil.getUserEntity(request);
         modelMap.addAttribute("user", userEntity);
         List<WelfareEntity> welfareEntityPageInfo = welfareService.selectListByUser(String.valueOf(userEntity.getId()));
         modelMap.addAttribute("list", welfareEntityPageInfo);
@@ -61,8 +62,8 @@ public class ViewController {
      * @return
      */
     @RequestMapping("/recharge")
-    public String recharge(Model modelMap) {
-        UserEntity userEntity = LoginAccountUtil.getUserEntity();
+    public String recharge(Model modelMap, HttpServletRequest request) {
+        UserEntity userEntity = LoginAccountUtil.getUserEntity(request);
         modelMap.addAttribute("user", userEntity);
         UserAccountEntity userAccountEntity = userAccountService.selectUserAccount(userEntity.getId());
         modelMap.addAttribute("userAccountEntity", userAccountEntity);
@@ -76,8 +77,8 @@ public class ViewController {
      * @return
      */
     @RequestMapping("/withdraw")
-    public String withdraw(Model modelMap) {
-        UserEntity userEntity = LoginAccountUtil.getUserEntity();
+    public String withdraw(Model modelMap, HttpServletRequest request) {
+        UserEntity userEntity = LoginAccountUtil.getUserEntity(request);
         modelMap.addAttribute("user", userEntity);
         UserAccountEntity userAccountEntity = userAccountService.selectUserAccount(userEntity.getId());
         modelMap.addAttribute("userAccountEntity", userAccountEntity);
@@ -91,8 +92,8 @@ public class ViewController {
      * @return
      */
     @RequestMapping("/donateLog")
-    public String donateLog(Model modelMap) {
-        UserEntity userEntity = LoginAccountUtil.getUserEntity();
+    public String donateLog(Model modelMap, HttpServletRequest request) {
+        UserEntity userEntity = LoginAccountUtil.getUserEntity(request);
         modelMap.addAttribute("user", userEntity);
         List<WelfareLogEntity> welfareLogEntityList = welfareLogService.selectListByUserId(userEntity.getId() + "");
         List<Long> paramList = welfareLogEntityList.stream().map(entity -> entity.getWelfareId()).collect(Collectors.toList());
@@ -110,22 +111,23 @@ public class ViewController {
      * @return
      */
     @RequestMapping("/donation/{id}")
-    public String donation(Model modelMap, @PathVariable String id) {
+    public String donation(Model modelMap, @PathVariable String id, HttpServletRequest request) {
         WelfareEntity welfareEntity = welfareService.selectById(id);
         modelMap.addAttribute("entity", welfareEntity);
-        UserEntity userEntity = LoginAccountUtil.getUserEntity();
+        UserEntity userEntity = LoginAccountUtil.getUserEntity(request);
         modelMap.addAttribute("user", userEntity);
         return "donation";
     }
-  /**
+
+    /**
      * @param modelMap
      * @return
      */
     @RequestMapping("/review/{id}")
-    public String review(Model modelMap, @PathVariable String id) {
+    public String review(Model modelMap, @PathVariable String id, HttpServletRequest request) {
         WelfareEntity welfareEntity = welfareService.selectById(id);
         modelMap.addAttribute("entity", welfareEntity);
-        UserEntity userEntity = LoginAccountUtil.getUserEntity();
+        UserEntity userEntity = LoginAccountUtil.getUserEntity(request);
         modelMap.addAttribute("user", userEntity);
         return "review";
     }
@@ -137,8 +139,8 @@ public class ViewController {
      * @return
      */
     @RequestMapping("/welfare/detail/{id}")
-    public String detail(Model modelMap, @PathVariable String id) {
-        UserEntity userEntity = LoginAccountUtil.getUserEntity();
+    public String detail(Model modelMap, @PathVariable String id, HttpServletRequest request) {
+        UserEntity userEntity = LoginAccountUtil.getUserEntity(request);
         modelMap.addAttribute("user", userEntity);
         WelfareEntity welfareEntity = welfareService.selectById(id);
         modelMap.addAttribute("entity", welfareEntity);
@@ -161,8 +163,8 @@ public class ViewController {
      * @return
      */
     @RequestMapping("/welfare/mydetail/{id}")
-    public String mydetail(Model modelMap, @PathVariable String id) {
-        UserEntity userEntity = LoginAccountUtil.getUserEntity();
+    public String mydetail(Model modelMap, @PathVariable String id, HttpServletRequest request) {
+        UserEntity userEntity = LoginAccountUtil.getUserEntity(request);
         modelMap.addAttribute("user", userEntity);
         WelfareEntity welfareEntity = welfareService.selectById(id);
         modelMap.addAttribute("entity", welfareEntity);
@@ -181,8 +183,8 @@ public class ViewController {
      * @return
      */
     @RequestMapping("/account")
-    public String account(Model modelMap) {
-        UserEntity userEntity = LoginAccountUtil.getUserEntity();
+    public String account(Model modelMap, HttpServletRequest request) {
+        UserEntity userEntity = LoginAccountUtil.getUserEntity(request);
         List<UserAccountLogEntity> list = userAccountService.selectLogList(userEntity.getId());
         UserAccountEntity userAccountEntity = userAccountService.selectUserAccount(userEntity.getId());
         modelMap.addAttribute("user", userEntity);
@@ -199,7 +201,12 @@ public class ViewController {
      * @return
      */
     @RequestMapping(value = "/listinfo")
-    public String selectList(Model modelMap, PageParam pageParam) {
+    public String selectList(Model modelMap, PageParam pageParam, HttpServletRequest request) {
+        UserEntity userEntity = LoginAccountUtil.getUserEntity(request);
+        if (userEntity != null) {
+            modelMap.addAttribute("user", userEntity);
+        }
+
         PageInfo<WelfareEntity> resultList = welfareService.selectListByIndex(pageParam.getPageNo(), pageParam.getPageSize());
         resultList.getList().stream().forEach(entity -> {
             long num1 = entity.getWelfareActualAccount();
@@ -216,7 +223,8 @@ public class ViewController {
         modelMap.addAttribute("list", resultList);
         return "listinfo";
     }
- /**
+
+    /**
      * 管理员项目列表
      *
      * @param modelMap
@@ -225,7 +233,7 @@ public class ViewController {
      */
     @RequestMapping(value = "/adminlistinfo")
     public String selectListAdmin(Model modelMap, ParamVO paramVO) {
-        PageInfo<WelfareEntity> resultList = welfareService.selectListByAdmin(paramVO.getPageNo(), paramVO.getPageSize(),paramVO.getType());
+        PageInfo<WelfareEntity> resultList = welfareService.selectListByAdmin(paramVO.getPageNo(), paramVO.getPageSize(), paramVO.getType());
         resultList.getList().stream().forEach(entity -> {
             long num1 = entity.getWelfareActualAccount();
             long num2 = entity.getWelfareAccount();
@@ -249,16 +257,16 @@ public class ViewController {
      * @return
      */
     @RequestMapping(value = "/addProject")
-    public String addProject(Model modelMap) {
-        UserEntity userEntity = LoginAccountUtil.getUserEntity();
+    public String addProject(Model modelMap, HttpServletRequest request) {
+        UserEntity userEntity = LoginAccountUtil.getUserEntity(request);
         modelMap.addAttribute("user", userEntity);
 
         return "addproject";
     }
 
     @RequestMapping(value = "/update/userview")
-    public String userview(Model modelMap) {
-        UserEntity userEntity = LoginAccountUtil.getUserEntity();
+    public String userview(Model modelMap, HttpServletRequest request) {
+        UserEntity userEntity = LoginAccountUtil.getUserEntity(request);
         modelMap.addAttribute("user", userEntity);
         return "userUpdate";
     }

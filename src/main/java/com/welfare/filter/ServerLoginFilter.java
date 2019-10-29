@@ -46,17 +46,17 @@ public class ServerLoginFilter implements Filter {
             }
 
 //            // 登录过滤
-//            Map checkResult = handleBossRequest(request, response);
-//            if ("true".equalsIgnoreCase(checkResult.get("success").toString())) {
-//                filterChain.doFilter(request, response);
-//            } else {
-//                response.sendRedirect("/login");
-//            }
+            Map checkResult = handleBossRequest(request, response);
+            if ("true".equalsIgnoreCase(checkResult.get("success").toString())) {
+                filterChain.doFilter(request, response);
+            } else {
+                response.sendRedirect("/login");
+            }
         } catch (Exception e) {
             logger.error("登录异常",e);
             Map<String, String> map = new HashMap<>();
             map.put("message", "登录异常");
-            WebUtil.writeJson2Client(response, JSON.toJSONString(map));
+            response.sendRedirect("/login");
         }
 
     }
@@ -82,7 +82,7 @@ public class ServerLoginFilter implements Filter {
         ) {
             return true;
         }
-        return true;
+        return false;
     }
 
     /**

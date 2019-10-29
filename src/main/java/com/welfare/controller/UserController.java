@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @Author ：chenxinyou.
  * @Title :
@@ -36,9 +38,9 @@ public class UserController {
      */
     @RequestMapping(value = "/get", method = RequestMethod.POST)
     @ResponseBody
-    public String get() {
+    public String get(HttpServletRequest request) {
         JSONObject jsonObject = new JSONObject();
-        UserEntity userEntity = LoginAccountUtil.getUserEntity();
+        UserEntity userEntity = LoginAccountUtil.getUserEntity(request);
         jsonObject.put("user", userEntity);
         return jsonObject.toString();
     }
@@ -63,9 +65,9 @@ public class UserController {
      */
     @RequestMapping(value = "/selectAccount", method = RequestMethod.POST)
     @ResponseBody
-    public String selectAccount() {
+    public String selectAccount(HttpServletRequest request) {
         JSONObject jsonObject = new JSONObject();
-        UserEntity userEntity = LoginAccountUtil.getUserEntity();
+        UserEntity userEntity = LoginAccountUtil.getUserEntity(request);
         UserAccountEntity userAccountEntity = userAccountService.selectUserAccount(userEntity.getId());
         jsonObject.put("userAccountEntity", userAccountEntity);
         jsonObject.put("code", "SUCCESS");
@@ -81,8 +83,8 @@ public class UserController {
      */
     @RequestMapping(value = "/donate", method = RequestMethod.POST)
     @ResponseBody
-    public String donate(String welfareId,String amount) {
-        UserEntity userEntity = LoginAccountUtil.getUserEntity();
+    public String donate(String welfareId,String amount,HttpServletRequest request) {
+        UserEntity userEntity = LoginAccountUtil.getUserEntity(request);
         return userAccountService.donate(userEntity.getId(), welfareId,Integer.parseInt( amount)).toJSONString();
 
     }
@@ -95,8 +97,8 @@ public class UserController {
      */
     @RequestMapping(value = "/withdraw", method = RequestMethod.POST)
     @ResponseBody
-    public String withdraw(int amount) {
-        UserEntity userEntity = LoginAccountUtil.getUserEntity();
+    public String withdraw(int amount,HttpServletRequest request) {
+        UserEntity userEntity = LoginAccountUtil.getUserEntity(request);
         return userAccountService.withdraw(userEntity.getId(), amount).toJSONString();
 
     }
@@ -109,8 +111,8 @@ public class UserController {
      */
     @RequestMapping(value = "/recharge", method = RequestMethod.POST)
     @ResponseBody
-    public String recharge(int amount) {
-        UserEntity userEntity = LoginAccountUtil.getUserEntity();
+    public String recharge(int amount,HttpServletRequest request) {
+        UserEntity userEntity = LoginAccountUtil.getUserEntity(request);
         return userAccountService.recharge(userEntity.getId(), amount).toJSONString();
     }
 
@@ -121,9 +123,9 @@ public class UserController {
      */
     @RequestMapping(value = "/selectLogList", method = RequestMethod.POST)
     @ResponseBody
-    public String selectLogList(PageParam pageParam, String type) {
+    public String selectLogList(PageParam pageParam, String type,HttpServletRequest request) {
         JSONObject jsonObject = new JSONObject();
-        UserEntity userEntity = LoginAccountUtil.getUserEntity();
+        UserEntity userEntity = LoginAccountUtil.getUserEntity(request);
         PageInfo<UserAccountLogEntity> list = userAccountService.selectLogList(userEntity.getId(), pageParam.getPageNo(), pageParam.getPageSize(), type);
         jsonObject.put("logList", list);
         jsonObject.put("code", "SUCCESS");

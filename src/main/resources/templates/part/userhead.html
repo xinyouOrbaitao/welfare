@@ -16,8 +16,8 @@
             <li><a href="/addProject">我要求助</a></li>
         </ul>
         <div class="navbar-right text-danger">
-            <span th:if="${user==null}"><a href="/login" >登录</a></span>
-            <span th:if="${user!=null}">欢迎:<span th:text="${user.username}"></span>&nbsp;|&nbsp;
+            <span th:if="${user}==null"><a href="/login" >登录</a></span>
+            <span th:if="${user}!=null">欢迎:<span th:text="${user.username}"></span>&nbsp;|&nbsp;
             <a class="text-danger" href="/logout">注销</a>
         </span>
         </div>
