@@ -52,6 +52,7 @@ public class ViewController {
         List<WelfareEntity> welfareEntityPageInfo = welfareService.selectListByUser(String.valueOf(userEntity.getId()));
         modelMap.addAttribute("list", welfareEntityPageInfo);
         modelMap.addAttribute("size", welfareEntityPageInfo.size());
+        modelMap.addAttribute("classNum", "3");
         return "user";
     }
 
@@ -221,6 +222,7 @@ public class ViewController {
             entity.setPeopleSize(welfarePeopleSize + "");
         });
         modelMap.addAttribute("list", resultList);
+        modelMap.addAttribute("classNum", "2");
         return "listinfo";
     }
 
@@ -260,7 +262,7 @@ public class ViewController {
     public String addProject(Model modelMap, HttpServletRequest request) {
         UserEntity userEntity = LoginAccountUtil.getUserEntity(request);
         modelMap.addAttribute("user", userEntity);
-
+        modelMap.addAttribute("classNum", "4");
         return "addproject";
     }
 

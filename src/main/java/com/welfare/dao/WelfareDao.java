@@ -50,7 +50,7 @@ public interface WelfareDao extends MyMapper<WelfareEntity> {
     )
     public List<WelfareEntity> selectListByState(@Param("state") Integer state);
 
-    @Select("select * from welfare where welfare_sponsor=#{welfareSponsor,jdbcType=VARCHAR}")
+    @Select("select * from welfare where welfare_sponsor=#{welfareSponsor,jdbcType=VARCHAR} order by end_time asc ")
     public List<WelfareEntity> selectListByUserId(@Param("welfareSponsor") String userId);
 
     @ResultMap(value = "query")

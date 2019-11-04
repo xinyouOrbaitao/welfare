@@ -73,6 +73,7 @@ public class ServerLoginFilter implements Filter {
                 || url.endsWith("/register")
                 || url.endsWith("/index")
                 || url.endsWith("/")
+                || url.endsWith("/file/down")
                 || url.endsWith(".js")
                 || url.endsWith(".css")
                 || url.endsWith(".jpg")

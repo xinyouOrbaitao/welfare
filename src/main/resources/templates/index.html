@@ -80,15 +80,6 @@
                         </dl>
                     </div>
                 </div>
-                <div class="list3">
-                    <div class="title">
-                        <span class="listtitle h2">乐捐</span>
-
-                    </div>
-                    <div class="body">
-                        <img src="../static/img/img-1.jpg">
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -130,7 +121,7 @@
             $(".c-banner .jumpBtn ul li[jumpImg="+nexImg+"]").css("background-color","black");
 
             //将当前图片试用绝对定位,下一张图片试用相对定位
-            $(".c-banner .banner ul img").eq(nowImg).css("position","absolute");
+            $(".c-banner .banner ul img").eq(nowImg).css("position","absolute").css("width:");
             $(".c-banner .banner ul img").eq(nexImg).css("position","relative");
 
             //轮播淡入淡出

@@ -94,7 +94,7 @@ li.word em{ padding-top:1px; display:inline-block; height:12px; background:#e950
 li.name i{ width:16px; height:15px; background-position:-322px -23px; margin-top:12px}
 .h_nav{ background:#fff; height:60px; clear:both}
 .logo{ height:44px; margin:8px 0;}
-.logo a{ display:block; width:155px; height:44px; text-indent:-3000000px; background:url(../img/logo-1.png) no-repeat;}
+.logo a{ display:block; width:155px; height:44px; text-indent:-3000000px; }
 .subslogan{ float:left; margin-left:12px; margin-top:33px}
 
 .nav ul{}

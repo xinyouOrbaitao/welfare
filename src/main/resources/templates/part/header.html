@@ -20,7 +20,6 @@
             </ul>
             <ul class="h_fr clearfix" th:each="cookie:${#httpServletRequest.getCookies()}" th:if="${cookie.getName().equals('D_S_P_L_S') && cookie.getValue().equals('1')}">
                 <li class="h_tel"><i></i>您好，欢迎参与公益平台</li>
-                <li class="to_log" id="login_li_person"><a href="/user" title="个人中心">个人中心</a></li>
                 <li class="to_reg" id="login_li_r"><a href="/logout" title="注销">注销</a></li>
             </ul>
         </div>

@@ -14,10 +14,10 @@
         <h1 class="logo fl"><a href="/" title="公益平台">公益平台</a></h1>
         <div class="nav fr">
             <ul class="clearfix">
-                <li id="index" class="z_cur"><i></i><a href="/" title="爱心首页">公益首页</a></li>
-                <li id="listinfo"><i></i><a href="/listinfo" title="公益活动">公益活动</a></li>
-                <li id="personal"><i></i><a href="/user" title="个人中心">个人中心</a></li>
-                <li id="help"><a href="/addProject">我要求助</a></li>
+                <li id="index" th:class="${classNum}=='1'?'z_cur':''" ><i></i><a href="/" title="首页">公益首页</a></li>
+                <li id="listinfo" th:class="${classNum}=='2'?'z_cur':''" ><i></i><a href="/listinfo" title="公益活动">公益活动</a></li>
+                <li id="personal" th:class="${classNum}=='3'?'z_cur':''" ><i></i><a href="/user" title="个人中心">个人中心</a></li>
+                <li id="help" th:class="${classNum}=='4'?'z_cur':''" ><a href="/addProject">我要求助</a></li>
             </ul>
         </div>
     </div>

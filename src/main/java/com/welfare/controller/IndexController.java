@@ -35,7 +35,7 @@ public class IndexController {
         modelMap.addAttribute("totalPeople", totalPeople);
         //捐款总金额
         modelMap.addAttribute("totalAmount", totalAmount);
-
+        modelMap.addAttribute("classNum", "1");
         List<WelfareEntity> welfareEntityList = welfareService.selectListToThree();
         //首页轮播图
         modelMap.addAttribute("welfareEntityList", welfareEntityList);
