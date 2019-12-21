@@ -6,10 +6,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @Author ：chenxinyou.
+ * @Author ：zhangyue.
  * @Title :
  * @Date ：Created in 2019/9/11 17:55
- * @Description:
+ * @Description: bumo的配置文件
  */
 @Configuration
 public class BumoConfig {

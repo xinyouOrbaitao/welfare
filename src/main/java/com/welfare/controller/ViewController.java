@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * @Author ：chenxinyou.
+ * @Author ：zhangyue.
  * @Title :
  * @Date ：Created in 2019/8/27 10:28
  * @Description:
@@ -67,6 +67,9 @@ public class ViewController {
         UserEntity userEntity = LoginAccountUtil.getUserEntity(request);
         modelMap.addAttribute("user", userEntity);
         UserAccountEntity userAccountEntity = userAccountService.selectUserAccount(userEntity.getId());
+        if(userAccountEntity==null){
+            userAccountEntity=new UserAccountEntity();
+        }
         modelMap.addAttribute("userAccountEntity", userAccountEntity);
         return "recharge";
     }
@@ -82,6 +85,9 @@ public class ViewController {
         UserEntity userEntity = LoginAccountUtil.getUserEntity(request);
         modelMap.addAttribute("user", userEntity);
         UserAccountEntity userAccountEntity = userAccountService.selectUserAccount(userEntity.getId());
+        if(userAccountEntity==null){
+            userAccountEntity=new UserAccountEntity();
+        }
         modelMap.addAttribute("userAccountEntity", userAccountEntity);
         return "withdraw";
     }
@@ -98,6 +104,7 @@ public class ViewController {
         modelMap.addAttribute("user", userEntity);
         List<WelfareLogEntity> welfareLogEntityList = welfareLogService.selectListByUserId(userEntity.getId() + "");
         List<Long> paramList = welfareLogEntityList.stream().map(entity -> entity.getWelfareId()).collect(Collectors.toList());
+
         List<WelfareEntity> resultList = welfareService.selectListByIdList(paramList);
         resultList.stream().forEach(entity -> {
             int welfarePeopleSize = welfareService.welfarePeopleSize(entity.getId() + "");
@@ -188,6 +195,9 @@ public class ViewController {
         UserEntity userEntity = LoginAccountUtil.getUserEntity(request);
         List<UserAccountLogEntity> list = userAccountService.selectLogList(userEntity.getId());
         UserAccountEntity userAccountEntity = userAccountService.selectUserAccount(userEntity.getId());
+        if(userAccountEntity==null){
+            userAccountEntity = new UserAccountEntity();
+        }
         modelMap.addAttribute("user", userEntity);
         modelMap.addAttribute("list", list);
         modelMap.addAttribute("userAccountEntity", userAccountEntity);
@@ -234,7 +244,8 @@ public class ViewController {
      * @return
      */
     @RequestMapping(value = "/adminlistinfo")
-    public String selectListAdmin(Model modelMap, ParamVO paramVO) {
+    public String selectListAdmin(Model modelMap, ParamVO paramVO, HttpServletRequest request) {
+
         PageInfo<WelfareEntity> resultList = welfareService.selectListByAdmin(paramVO.getPageNo(), paramVO.getPageSize(), paramVO.getType());
         resultList.getList().stream().forEach(entity -> {
             long num1 = entity.getWelfareActualAccount();

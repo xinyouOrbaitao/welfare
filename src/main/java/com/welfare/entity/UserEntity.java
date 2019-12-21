@@ -6,7 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Table;
 
 /**
- * @Author ：chenxinyou.
+ * @Author ：zhangyue.
  * @Title :
  * @Date ：Created in 2019/7/10 14:41
  * @Description: 用户

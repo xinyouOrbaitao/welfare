@@ -5,7 +5,7 @@ import com.welfare.entity.UserEntity;
 import org.apache.ibatis.annotations.*;
 
 /**
- * @Author ：chenxinyou.
+ * @Author ：zhangyue.
  * @Title :
  * @Date ：Created in 2019/7/10 14:41
  * @Description:
@@ -31,7 +31,7 @@ public interface UserDao extends MyMapper<UserEntity> {
     UserEntity query(String username);
 
     @ResultMap(value = "queryUser")
-    @Select("select * from user where username = #{username,jdbcType=VARCHAR} limit 0,1")
+    @Select("select * from user where username = #{username,jdbcType=VARCHAR}  limit 0,1")
     UserEntity queryOne(String username);
 
     @Update("update user SET password =#{password,jdbcType=VARCHAR} where username = #{username} and phone = #{phone}")

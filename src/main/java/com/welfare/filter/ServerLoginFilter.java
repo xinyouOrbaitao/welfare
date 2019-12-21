@@ -1,10 +1,8 @@
 package com.welfare.filter;
 
-import com.alibaba.fastjson.JSON;
 import com.welfare.entity.UserEntity;
 import com.welfare.util.CookieUtil;
 import com.welfare.util.LoginAccountUtil;
-import com.welfare.util.WebUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @Author ：chenxinyou.
+ * @Author ：zhangyue.
  * @Title :
  * @Date ：Created in 2019/8/20 10:20
  * @Description:

@@ -6,10 +6,8 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/welfare?useUnicode=true&amp;characterEncoding=utf-8&amp;zeroDateTimeBehavior=convertToNull
     username: root
-    password: root
-#      url: jdbc:mysql://47.75.172.109:3306/welfare?useUnicode=true&amp;characterEncoding=utf-8&amp;zeroDateTimeBehavior=convertToNull
-#      username: root
-#      password: 123456
+    password: 123456
+
     driver-class-name: com.mysql.jdbc.Driver
   mvc:
     static-path-pattern: /static/**
@@ -44,9 +42,9 @@ welfare:
   cookie:
     encryptKey: 168367766d874d98870c8ce618942f48
   bumo:
-    url: http://10.100.12.129:26002
-    address: buQtLqpEo4XHPXXoncVBy6E2vcrCNFkGbYXm
-    privateKey: privbvXJsPiG1ip5UZftpAMJ2icjsNt1DoW6X8uY4MNew9HMXscsYGLV
+    url: http://192.168.121.128:26002
+    address: buQo18cwoNosY6WtmL4koCJ3uoBNhJyeejJD
+    privateKey: privbvvkTsUfJQf4iUx5pb9wEcryqc1nh21deL3D7wCep7G8w5dk8ZVs
   file:
-    path: d:/data/
+    path: d:/data
 

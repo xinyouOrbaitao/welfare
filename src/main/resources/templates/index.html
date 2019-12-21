@@ -19,8 +19,13 @@
 <div layout:fragment="container" class="container">
     <div class="c-banner">
         <div class="banner">
-            <ul th:each="entity,loopStatus:${welfareEntityList}">
-                <li><img  th:src="@{/file/down?fileId={image}(image=${entity.image})}"></li>
+            <!--<ul th:each="entity,loopStatus:${welfareEntityList}">-->
+                <!--<li><img  th:src="@{/file/down?fileId={image}(image=${entity.image})}"></li>-->
+            <!--</ul>-->
+            <ul >
+                <li><img src = "/static/img/timg1.jpg"></img></li>
+                <li><img src = "/static/img/timg3.jpg"></img></li>
+                <li><img src = "/static/img/timg7.jpg"></img></li>
             </ul>
         </div>
         <div class="nexImg">
@@ -41,46 +46,54 @@
     <!-- 项目信息 显示最新10条数据-->
     <div class="row">
         <div class="col-xs-10 col-xs-offset-1">
-            <div class="col-xs-8">
-                <!-- 信息列表 -->
-                <div calss="WelfareList" th:each="entity:${entityList.list}">
-                    <div class="media">
-                        <h4 class="media-heading h3 text-a" th:text="${entity.welfareTitle}"></h4>
-                        <a class="pull-left fixedimg" th:href="@{/welfare/detail/{id}(id=${entity.id})}">
-                            <img class="media-object" th:src="@{/file/down?fileId={image}(image=${entity.image})}">
-                        </a>
-                        <div class="media-body">
-                            <div class="descript" th:text="${#strings.abbreviate(entity.context,20)}">
-                            </div>
-                            <br>
-                            <p class="text-muted small">
-                                <span class="date" th:text="${#dates.format(entity.createTime,'yyyy-MM-dd HH:mm:ss')}"></span>
-                            </p>
-                            <p class="text-right text-muted lead1">
-                                <i class="fa fa-commenting-o fa-fw"></i>
-                                <a class="text-muted" th:href="@{/welfare/detail/{id}(id=${entity.id})}">详情</a>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+           <!--<div class="col-xs-8">-->
+                <!--&lt;!&ndash; 信息列表 &ndash;&gt;-->
+                <!--<div calss="WelfareList" th:each="entity:${entityList.list}">-->
+                    <!--<div class="media">-->
+                        <!--<h4 class="media-heading h3 text-a" th:text="${entity.welfareTitle}"></h4>-->
+                        <!--<a class="pull-left fixedimg" th:href="@{/welfare/detail/{id}(id=${entity.id})}">-->
+                            <!--<img class="media-object" th:src="@{/file/down?fileId={image}(image=${entity.image})}">-->
+                        <!--</a>-->
+                        <!--<div class="media-body">-->
+                            <!--<div class="descript" th:text="${#strings.abbreviate(entity.context,20)}">-->
+                            <!--</div>-->
+                            <!--<br>-->
+                            <!--<p class="text-muted small">-->
+                                <!--<span class="date" th:text="${#dates.format(entity.createTime,'yyyy-MM-dd HH:mm:ss')}"></span>-->
+                            <!--</p>-->
+                            <!--<p class="text-right text-muted lead1">-->
+                                <!--<i class="fa fa-commenting-o fa-fw"></i>-->
+                                <!--<a class="text-muted" th:href="@{/welfare/detail/{id}(id=${entity.id})}">详情</a>-->
+                            <!--</p>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div> -->
 
             <!--累计捐献数据-->
-            <div class="col-xs-4">
-                <div class="list2">
-                    <div class="imgtop"></div>
-                    <div class="imgbody">
-                        <dl>
-                            <dt>历史善款总额：</dt>
-                            <dd><span th:text="${totalAmount}">1,788,172</span>元</dd>
-                        </dl>
-                        <dl>
-                            <dt>历史爱心总人次：</dt>
-                            <dd><span th:text="${totalPeople}">105,380</span>人次</dd>
-                        </dl>
-                    </div>
-                </div>
-            </div>
+            <!--<div class="col-xs-4">-->
+                <!--<div class="list2">-->
+                    <!--<div class="imgtop"></div>-->
+                    <!--<div class="imgbody">-->
+                        <!--<dl>-->
+                            <!--<dt>历史善款总额：</dt>-->
+                            <!--<dd><span th:text="${totalAmount}">1,788,172</span>元</dd>-->
+                        <!--</dl>-->
+                        <!--<dl>-->
+            <!-- position: fixed;
+
+left: 100px;
+
+top: 100px;
+
+z-index: 100;
+ -->
+                            <!--<dt>历史爱心总人次：</dt>-->
+                            <!--<dd><span th:text="${totalPeople}">105,380</span>人次</dd>-->
+                        <!--</dl>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
         </div>
     </div>
 </div>

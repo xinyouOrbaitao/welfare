@@ -11,15 +11,17 @@ import com.welfare.service.WelfareService;
 import com.welfare.util.LoginAccountUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
- * @Author ：chenxinyou.
+ * @Author ：zhangyue.
  * @Title :
  * @Date ：Created in 2019/8/19 10:29
  * @Description:
@@ -34,9 +36,12 @@ public class WelfareController {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST , produces = "application/json;charset=UTF-8")
     @ResponseBody
-    public String add(@RequestBody WelfareEntity entity) {
+    public String add(@RequestBody WelfareEntity entity, HttpServletRequest request) {
         JSONObject jsonObject = new JSONObject();
+        UserEntity userEntity = LoginAccountUtil.getUserEntity(request);
         jsonObject.put("code", "SUCCESS");
+        entity.setWelfareSponsor(userEntity.getId()+"");
+        entity.setWelfareSponsorName(userEntity.getUsername());
         welfareService.save(entity);
         return jsonObject.toJSONString();
     }

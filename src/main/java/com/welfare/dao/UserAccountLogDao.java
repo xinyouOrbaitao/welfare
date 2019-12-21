@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.*;
 import java.util.List;
 
 /**
- * @Author ：chenxinyou.
+ * @Author ：zhangyue.
  * @Title :
  * @Date ：Created in 2019/8/25 14:24
  * @Description:
@@ -23,7 +23,7 @@ public interface UserAccountLogDao extends MyMapper<UserAccountLogEntity> {
             @Result(property = "welfareId", column = "welfare_id"),
             @Result(property = "welfareName", column = "welfare_name"),
             @Result(property = "username", column = "username"),
-            @Result(property = "createTime", column = "create_time"),
+            @Result(property = "createTime", column = "creat_time"),
             @Result(property = "hash", column = "hash")
 
     })

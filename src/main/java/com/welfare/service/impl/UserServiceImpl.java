@@ -4,7 +4,6 @@ import com.welfare.dao.UserAccountDao;
 import com.welfare.dao.UserDao;
 import com.welfare.entity.BumoEntity;
 import com.welfare.entity.UserAccountEntity;
-import com.welfare.entity.UserAccountLogEntity;
 import com.welfare.entity.UserEntity;
 import com.welfare.service.BumoService;
 import com.welfare.service.UserService;
@@ -13,10 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.List;
-
 /**
- * @Author ：chenxinyou.
+ * @Author ：zhangyue.
  * @Title :
  * @Date ：Created in 2019/7/10 15:01
  * @Description:
@@ -41,7 +38,10 @@ public class UserServiceImpl implements UserService {
         entity.setPassword(md5);
         entity.setPhone(phone);
         int result = userDao.insertSelective(entity);
+
+        //曾经没有注释下面这段代码
         entity = userDao.queryOne(username);
+
         //调用布比接口，生成用户账号
         BumoEntity bumoEntity = bumoService.createAccount(entity.getId());
         UserAccountEntity userAccountEntity = new UserAccountEntity();

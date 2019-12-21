@@ -1,7 +1,7 @@
 package com.welfare.entity.vo;
 
 /**
- * @Author ：chenxinyou.
+ * @Author ：zhangyue.
  * @Title :
  * @Date ：Created in 2019/10/14 14:25
  * @Description:

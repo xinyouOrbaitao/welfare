@@ -34,7 +34,7 @@ public class CookieUtil {
         /*
             设置登录token
          */
-        String tokenStr = userEntity.getUsername() + tokenSep + userEntity.getEmail() + tokenSep + userEntity.getRole();
+        String tokenStr = userEntity.getId()+tokenSep+userEntity.getUsername() + tokenSep + userEntity.getEmail() + tokenSep + userEntity.getRole();
         String token = AesUtil.encrypt(tokenStr, CookieConfig.cookieEncryptKey);
         addCookie(response, SystemConstants.LOGIN_TOKEN, token, true);
         LoginAccountUtil.setUserEntity(userEntity);
@@ -83,7 +83,7 @@ public class CookieUtil {
         }
         String tokenStr = AesUtil.decrypt(cookieToken, CookieConfig.cookieEncryptKey);
         String[] tokenArr = tokenStr.split(tokenSep);
-        if (tokenArr.length != 3) {
+        if (tokenArr.length != 4) {
             return null;
         }
         String loginSignStr = cookieLoginSign;
@@ -96,9 +96,10 @@ public class CookieUtil {
         }
 
         UserEntity loginAccount = new UserEntity();
-        loginAccount.setUsername(tokenArr[0]);
-        loginAccount.setEmail(tokenArr[1]);
-        loginAccount.setRole(tokenArr[2]);
+        loginAccount.setId(Long.parseLong(tokenArr[0]));
+        loginAccount.setUsername(tokenArr[1]);
+        loginAccount.setEmail(tokenArr[2]);
+        loginAccount.setRole(tokenArr[3]);
         return loginAccount;
     }
 

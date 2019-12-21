@@ -20,21 +20,21 @@ import io.bumo.model.response.result.data.TransactionFees;
 import org.junit.Test;
 
 /**
- * @Author ：chenxinyou.
+ * @Author ：zhangyue.
  * @Title :
  * @Date ：Created in 2019/9/18 19:23
  * @Description:
  */
 public class BumoTest extends WelfareTest {
 
-    static SDK sdk = SDK.getInstance("http://10.100.12.129:26002");
+    static SDK sdk = SDK.getInstance("http://192.168.121.128:26002");
 
     @Test
     public void SDKConfigure() {
         SDKConfigure sdkConfigure = new SDKConfigure();
         sdkConfigure.setHttpConnectTimeOut(5000);
         sdkConfigure.setHttpReadTimeOut(5000);
-        sdkConfigure.setUrl("http://10.100.12.129:26002");
+        sdkConfigure.setUrl("http://192.168.121.128:26002");
         sdk = SDK.getInstance(sdkConfigure);
     }
 
@@ -43,12 +43,12 @@ public class BumoTest extends WelfareTest {
      */
     @Test
     public void checkAccountActivated() {
-        SDK sdk = SDK.getInstance("http://10.100.12.129:26002");
+        SDK sdk = SDK.getInstance("http://192.168.121.128:26002");
         Keypair keypair = Keypair.generator();
         System.out.println(JSON.toJSONString(keypair, true));
 
         AccountCheckActivatedRequst request = new AccountCheckActivatedRequst();
-        request.setAddress(keypair.getAddress());
+        request.setAddress("buQhRjGw7CRh2azkTSQ3jZB1CTGjDp9VB5kd");
 
         AccountCheckActivatedResponse response = sdk.getAccountService().checkActivated(request);
         if (response.getErrorCode() == 0) {
@@ -63,7 +63,7 @@ public class BumoTest extends WelfareTest {
      */
     @Test
     public void checkBlockStatus() {
-        SDK sdk = SDK.getInstance("http://10.100.12.129:26002");
+        SDK sdk = SDK.getInstance("http://192.168.121.128:26002");
         BlockCheckStatusResponse response = sdk.getBlockService().checkStatus();
         System.out.println(response.getResult().getSynchronous());
     }
@@ -101,7 +101,7 @@ public class BumoTest extends WelfareTest {
      */
     @Test
     public void getAccountInfo() {
-        SDK sdk = SDK.getInstance("http://10.100.12.129:26002");
+        SDK sdk = SDK.getInstance("http://192.168.121.128:26002");
 //        AccountCreateResponse accountCreateResponse = sdk.getAccountService().create();
         // Init request
 //        String accountAddress = accountCreateResponse.getResult().getAddress();
@@ -126,7 +126,7 @@ public class BumoTest extends WelfareTest {
      */
     @Test
     public void getAccountNonce() {
-        SDK sdk = SDK.getInstance("http://10.100.12.129:26002");
+        SDK sdk = SDK.getInstance("http://192.168.121.128:26002");
         // Init request
         String accountAddress = "buQoBhEpLcUVypAQMiBKFAGJD1b4yd6b8qrQ";
         AccountGetNonceRequest request = new AccountGetNonceRequest();
@@ -142,7 +142,7 @@ public class BumoTest extends WelfareTest {
     }
 
     public long getNonce(String accountAddress) {
-        SDK sdk = SDK.getInstance("http://10.100.12.129:26002");
+        SDK sdk = SDK.getInstance("http://192.168.121.128:26002");
         // Init request
         AccountGetNonceRequest request = new AccountGetNonceRequest();
         request.setAddress(accountAddress);
@@ -164,7 +164,7 @@ public class BumoTest extends WelfareTest {
      */
     @Test
     public void getAccountBalance() {
-        SDK sdk = SDK.getInstance("http://10.100.12.129:26002");
+        SDK sdk = SDK.getInstance("http://192.168.121.128:26002");
         // Init request
         String accountAddress = "buQoBhEpLcUVypAQMiBKFAGJD1b4yd6b8qrQ";
         AccountGetBalanceRequest request = new AccountGetBalanceRequest();
@@ -185,7 +185,7 @@ public class BumoTest extends WelfareTest {
      */
     @Test
     public void getAccountAssets() {
-        SDK sdk = SDK.getInstance("http://10.100.12.129:26002");
+        SDK sdk = SDK.getInstance("http://192.168.121.128:26002");
         // Init request
         AccountGetAssetsRequest request = new AccountGetAssetsRequest();
         request.setAddress("buQoBhEpLcUVypAQMiBKFAGJD1b4yd6b8qrQ");
@@ -400,7 +400,7 @@ public class BumoTest extends WelfareTest {
      */
     @Test
     public void getLastBlockNumber() {
-        SDK sdk = SDK.getInstance("http://10.100.12.129:26002");
+        SDK sdk = SDK.getInstance("http://192.168.121.128:26002");
         // Call getNumber
         BlockGetNumberResponse response = sdk.getBlockService().getNumber();
         if (0 == response.getErrorCode()) {
@@ -418,7 +418,7 @@ public class BumoTest extends WelfareTest {
         // Init request
         BlockGetInfoRequest request = new BlockGetInfoRequest();
         request.setBlockNumber(2183L);
-        SDK sdk = SDK.getInstance("http://10.100.12.129:26002");
+        SDK sdk = SDK.getInstance("http://192.168.121.128:26002");
         // Call getInfo
         BlockGetInfoResponse response = sdk.getBlockService().getInfo(request);
         if (response.getErrorCode() == 0) {
@@ -434,7 +434,7 @@ public class BumoTest extends WelfareTest {
      */
     @Test
     public void getBlockLatestInfo() {
-        SDK sdk = SDK.getInstance("http://10.100.12.129:26002");
+        SDK sdk = SDK.getInstance("http://192.168.121.128:26002");
         // Call getLatestInfo
         BlockGetLatestInfoResponse response = sdk.getBlockService().getLatestInfo();
         if (response.getErrorCode() == 0) {
@@ -453,7 +453,7 @@ public class BumoTest extends WelfareTest {
         // Init request
         BlockGetValidatorsRequest request = new BlockGetValidatorsRequest();
         //request.setBlockNumber(629743L);
-        SDK sdk = SDK.getInstance("http://10.100.12.129:26002");
+        SDK sdk = SDK.getInstance("http://192.168.121.128:26002");
         // Call getValidators
         BlockGetValidatorsResponse response = sdk.getBlockService().getValidators(request);
         if (response.getErrorCode() == 0) {
@@ -469,7 +469,7 @@ public class BumoTest extends WelfareTest {
      */
     @Test
     public void getLatestBlockValidators() {
-        SDK sdk = SDK.getInstance("http://10.100.12.129:26002");
+        SDK sdk = SDK.getInstance("http://192.168.121.128:26002");
         BlockGetLatestValidatorsResponse lockGetLatestValidatorsResponse = sdk.getBlockService().getLatestValidators();
         if (lockGetLatestValidatorsResponse.getErrorCode() == 0) {
             BlockGetLatestValidatorsResult lockGetLatestValidatorsResult = lockGetLatestValidatorsResponse.getResult();
@@ -484,7 +484,7 @@ public class BumoTest extends WelfareTest {
      */
     @Test
     public void getBlockReward() {
-        SDK sdk = SDK.getInstance("http://10.100.12.129:26002");
+        SDK sdk = SDK.getInstance("http://192.168.121.128:26002");
         // Init request
         BlockGetRewardRequest request = new BlockGetRewardRequest();
         request.setBlockNumber(629743L);
@@ -504,7 +504,7 @@ public class BumoTest extends WelfareTest {
      */
     @Test
     public void getLatestBlockReward() {
-        SDK sdk = SDK.getInstance("http://10.100.12.129:26002");
+        SDK sdk = SDK.getInstance("http://192.168.121.128:26002");
         // Call getLatestReward
         BlockGetLatestRewardResponse response = sdk.getBlockService().getLatestReward();
         if (response.getErrorCode() == 0) {
@@ -520,7 +520,7 @@ public class BumoTest extends WelfareTest {
      */
     @Test
     public void getBlockFees() {
-        SDK sdk = SDK.getInstance("http://10.100.12.129:26002");
+        SDK sdk = SDK.getInstance("http://192.168.121.128:26002");
         // Init request
         BlockGetFeesRequest request = new BlockGetFeesRequest();
         request.setBlockNumber(629743L);
@@ -539,7 +539,7 @@ public class BumoTest extends WelfareTest {
      */
     @Test
     public void getBlockLatestFees() {
-        SDK sdk = SDK.getInstance("http://10.100.12.129:26002");
+        SDK sdk = SDK.getInstance("http://192.168.121.128:26002");
         // Call getLatestFees
         BlockGetLatestFeesResponse response = sdk.getBlockService().getLatestFees();
         if (response.getErrorCode() == 0) {
@@ -554,7 +554,7 @@ public class BumoTest extends WelfareTest {
      */
     @Test
     public void activateAccount() {
-        SDK sdk = SDK.getInstance("http://10.100.12.129:26002");
+        SDK sdk = SDK.getInstance("http://192.168.121.128:26002");
 
 
         // The account private key to activate a new account
@@ -599,7 +599,7 @@ public class BumoTest extends WelfareTest {
      */
     @Test
     public void setAccountMetadata() {
-        SDK sdk = SDK.getInstance("http://10.100.12.129:26002");
+        SDK sdk = SDK.getInstance("http://192.168.121.128:26002");
         // Init variable
         // The account private key to set metadata
         String accountPrivateKey = "privbyQCRp7DLqKtRFCqKQJr81TurTqG6UKXMMtGAmPG3abcM9XHjWvq";
@@ -638,7 +638,7 @@ public class BumoTest extends WelfareTest {
      */
     @Test
     public void setAccountPrivilege() {
-        SDK sdk = SDK.getInstance("http://10.100.12.129:26002");
+        SDK sdk = SDK.getInstance("http://192.168.121.128:26002");
         // Init variable
         // The account private key to set privilege
         String accountPrivateKey = "privbyQCRp7DLqKtRFCqKQJr81TurTqG6UKXMMtGAmPG3abcM9XHjWvq";
@@ -676,7 +676,7 @@ public class BumoTest extends WelfareTest {
      */
     @Test
     public void issueAsset() {
-        SDK sdk = SDK.getInstance("http://10.100.12.129:26002");
+        SDK sdk = SDK.getInstance("http://192.168.121.128:26002");
         // Init variable
         // The account private key to issue asset
         String issuePrivateKey = "privbyQCRp7DLqKtRFCqKQJr81TurTqG6UKXMMtGAmPG3abcM9XHjWvq";
@@ -719,7 +719,7 @@ public class BumoTest extends WelfareTest {
      */
     @Test
     public void sendAsset() {
-        SDK sdk = SDK.getInstance("http://10.100.12.129:26002");
+        SDK sdk = SDK.getInstance("http://192.168.121.128:26002");
         // Init variable
         // The account private key to start this transaction
         String senderPrivateKey = "privbyQCRp7DLqKtRFCqKQJr81TurTqG6UKXMMtGAmPG3abcM9XHjWvq";
@@ -765,7 +765,7 @@ public class BumoTest extends WelfareTest {
      */
     @Test
     public void sendBu() {
-        SDK sdk = SDK.getInstance("http://10.100.12.129:26002");
+        SDK sdk = SDK.getInstance("http://192.168.121.128:26002");
         // Init variable
         // 发送交易账号的私钥
         String senderPrivateKey = "privbvXJsPiG1ip5UZftpAMJ2icjsNt1DoW6X8uY4MNew9HMXscsYGLV";
@@ -812,7 +812,7 @@ public class BumoTest extends WelfareTest {
      */
     @Test
     public void createLog() {
-        SDK sdk = SDK.getInstance("http://10.100.12.129:26002");
+        SDK sdk = SDK.getInstance("http://192.168.121.128:26002");
         // Init variable
         // The account private key to create log
         String createPrivateKey = "privbyQCRp7DLqKtRFCqKQJr81TurTqG6UKXMMtGAmPG3abcM9XHjWvq";
@@ -861,7 +861,7 @@ public class BumoTest extends WelfareTest {
      */
     private String submitTransaction(String[] senderPrivateKeys, String senderAddresss, BaseOperation operation, Long senderNonce, Long gasPrice, Long feeLimit) {
 
-        SDK sdk = SDK.getInstance("http://10.100.12.129:26002");
+        SDK sdk = SDK.getInstance("http://192.168.121.128:26002");
 
         // 3. Build transaction
         TransactionBuildBlobRequest transactionBuildBlobRequest = new TransactionBuildBlobRequest();

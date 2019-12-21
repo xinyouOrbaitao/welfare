@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * @Author ：chenxinyou.
+ * @Author ：zhangyue.
  * @Title :
  * @Date ：Created in 2019/7/11 14:14
  * @Description:
@@ -51,6 +51,8 @@ public class LoginController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
     public String login(HttpServletResponse res, String username, String password) {
+        System.out.println("登录的用户名是:"+username);
+        //System.out.println("注册的密码是:"+);
         JSONObject jsonObject = new JSONObject();
         if (StringUtils.isEmpty(username)) {
             jsonObject.put("code", "1");
@@ -62,7 +64,7 @@ public class LoginController {
             jsonObject.put("message", "密码不能为空");
             return jsonObject.toString();
         }
-        UserEntity entity = userService.login(username, password);
+        UserEntity entity = userService.login(username,password);
         if (StringUtils.isEmpty(entity)) {
             jsonObject.put("code", "1");
             jsonObject.put("message", "用户不存在");

@@ -3,7 +3,7 @@ package com.welfare.entity;
 import javax.persistence.*;
 
 /**
- * @Author ：chenxinyou.
+ * @Author ：zhangyue.
  * @Title :
  * @Date ：Created in 2019/7/10 14:42
  * @Description:

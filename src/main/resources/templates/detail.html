@@ -20,7 +20,7 @@
             <ol class="breadcrumb">
                 <li><a href="/" class="text-a">首页</a></li>
                 <li><a href="/listinfo" class="text-a">项目列表</a></li>
-                <li class="active">项目名字</li>
+                <li class="active">项目名称</li>
             </ol>
         </div>
         <div class="row detailrow">
@@ -80,10 +80,10 @@
 
             </div>
             <div class="col-xs-5">
-                <div class="rightinfo">
-                    <p class="lead">发起方</p>
-                    <p th:text="${entity.welfareSponsorName}"></p>
-                </div>
+                <!--<div class="rightinfo">-->
+                    <!--<p class="lead">发起方</p>-->
+                    <!--<p th:text="${entity.welfareSponsorName}"></p>-->
+                <!--</div>-->
                 <!-- 捐款日志列表 -->
                 <div class="gundong" id="layer1">
                     <div class="title">
@@ -96,10 +96,10 @@
                                 <span th:text="${logEntity.username}"></span>
                                 <!-- 募捐的时间 -->
                                 在
-                                <span class="text-info" th:text="${#dates.format(logEntity.createTime,'yyyy-MM-dd HH:mm:ss')}">2017-4-22</span>
+                                <span class="text-info" th:text="${#dates.format(logEntity.createTime,'yyyy-MM-dd HH:mm:ss')}"></span>
                                 <!-- 募捐的金额 -->
                                 捐助了
-                                <span class="money" th:text="${logEntity.amount}">100</span>元
+                                <span class="money" th:text="${logEntity.amount}">0</span>元
                             </li>
                         </ul>
                         <ul id="cont2"></ul>

@@ -17,11 +17,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 /**
- * @Author ：chenxinyou.
+ * @Author ：zhangyue.
  * @Title :
  * @Date ：Created in 2019/8/25 13:34
  * @Description:
@@ -172,6 +173,11 @@ public class WelfareServiceImpl implements WelfareService {
 
     @Override
     public List<WelfareEntity> selectListByIdList(List<Long> list) {
-        return welfareDao.selectListByIdList(list);
+        if(list.size()>0){
+            return welfareDao.selectListByIdList(list);
+        }else {
+            return new ArrayList<>();
+        }
+
     }
 }

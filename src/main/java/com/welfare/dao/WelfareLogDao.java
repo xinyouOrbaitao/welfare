@@ -3,12 +3,11 @@ package com.welfare.dao;
 import com.welfare.MyMapper;
 import com.welfare.entity.WelfareLogEntity;
 import org.apache.ibatis.annotations.*;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
- * @Author ：chenxinyou.
+ * @Author ：zhangyue.
  * @Title :
  * @Date ：Created in 2019/7/10 14:49
  * @Description:

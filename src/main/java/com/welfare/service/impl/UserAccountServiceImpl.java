@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @Author ：chenxinyou.
+ * @Author ：zhangyue.
  * @Title :
  * @Date ：Created in 2019/8/25 13:32
  * @Description:
@@ -140,6 +140,7 @@ public class UserAccountServiceImpl implements UserAccountService {
      */
     @Override
     public JSONObject donate(long userId, String welfareId, int amount) {
+
         JSONObject jsonObject = new JSONObject();
         WelfareEntity welfareEntity = welfareDao.selectWelfareOne(welfareId);
         UserAccountEntity userAccountEntity = userAccountDao.selectByUserId(userId);
@@ -147,6 +148,11 @@ public class UserAccountServiceImpl implements UserAccountService {
         if (StringUtils.isEmpty(userAccountEntity)) {
             jsonObject.put("code", "error");
             jsonObject.put("msg", "账号余额不足");
+            return jsonObject;
+        }
+        if(Long.toString(toUserEntity.getUserId()).equals(Long.toString(userId))){
+            jsonObject.put("code", "error");
+            jsonObject.put("msg", "不能給自己捐款！");
             return jsonObject;
         }
         if (StringUtils.isEmpty(welfareEntity)) {

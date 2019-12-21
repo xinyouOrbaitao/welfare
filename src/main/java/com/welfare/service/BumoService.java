@@ -1,10 +1,9 @@
 package com.welfare.service;
 
 import com.welfare.entity.BumoEntity;
-import io.bumo.model.response.result.AccountCreateResult;
 
 /**
- * @Author ：chenxinyou.
+ * @Author ：zhangyue.
  * @Title :
  * @Date ：Created in 2019/9/11 18:01
  * @Description:

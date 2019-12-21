@@ -1,16 +1,17 @@
 package com.welfare.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.welfare.entity.UserEntity;
 import com.welfare.entity.WelfareEntity;
 import com.welfare.entity.vo.PageParam;
 import com.welfare.service.WelfareService;
+import com.welfare.util.LoginAccountUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.ArrayList;
-import java.util.Date;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
@@ -25,7 +26,14 @@ public class IndexController {
      * @return
      */
     @RequestMapping("/")
-    public String index(Model modelMap, PageParam pageParam) {
+    public String index(Model modelMap, PageParam pageParam, HttpServletRequest request) {
+
+
+        UserEntity userEntity = LoginAccountUtil.getUserEntity(request);
+        if(userEntity!=null){
+            modelMap.addAttribute("user", userEntity);
+        }
+
         PageInfo<WelfareEntity> resultList = welfareService.selectListByIndex(pageParam.getPageNo(), pageParam.getPageSize());
 
         modelMap.addAttribute("entityList", resultList);

@@ -5,6 +5,7 @@
 .breadcrumb{
 	margin: 0px;
 	padding: 0px;
+	font-size: 20px;
 }
 .breadcrumb a{
 	color: black;
