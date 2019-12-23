@@ -274,13 +274,21 @@ li.l_m_btn .join_btn{ width:250px; height:40px; line-height:40px; font-size:18px
 .loginInfo{ width:648px; margin:74px 0 74px 174px;}
 .loginInfo li{ margin-bottom:15px;}
 .inpu,.int{ float:left; display:inline; position:relative;}
+.codeDiv,.int{ float:left; display:inline; position:relative;}
 .inpu{ height:43px; border:#e5e6e6 solid 1px; border-radius:2px;  }
+.codeDiv{ height:43px; border:#e5e6e6 solid 1px; border-radius:2px;  }
 .inpu i{ position:absolute; left:13px; top:12px; width:20px; height:20px; background:url(../img/ico.png) no-repeat;}
+.codeDiv i{ position:absolute; left:13px; top:12px; width:20px; height:20px; background:url(../img/ico.png) no-repeat;}
 .inpu input{ *float:left; width:344px; height:43px; font-size:14px; text-indent:46px; color:#9b9b9b; line-height:43px; border:none; }
+.codeDiv input{ *float:left; width:170px; height:43px; font-size:14px; text-indent:46px; color:#9b9b9b; line-height:43px; border:none; }
 .inpu input:focus{ border-color:#6ADAFF;}
+.codeDiv input:focus{ border-color:#6ADAFF;}
 .inpu.error{ border-color:#e95050;}
-.inpu.error input{ color:#e95050}
+.codeDiv.error input{ color:#e95050}
 .int{ line-height:45px; margin-left:22px; font-size:14px}
+.codeDiv{ line-height:45px;  font-size:14px}
+.codeImage{ line-height:45px;  font-size:14px;}
+.codeImage img{ width:auto;margin-left:2px;height:43px;}
 .iError{ color:#e95050}
 .iNote{ color:#17bd9b;}
 .iNote i{ display:inline-block; width:20px; height:20px; background:url(../img/ico.png) -280px 0 no-repeat; vertical-align:-4px; *vertical-align:middle; margin-right:5px}
@@ -288,6 +296,7 @@ li.l_m_btn .join_btn{ width:250px; height:40px; line-height:40px; font-size:18px
 i.icoUser{ background-position:-300px 0;}
 i.icoPwd{ background-position:-320px 0; height:22px;}
 i.icoIphone{background-position:-380px 0; height:24px; top:11px;}
+i.iocCode{background-position:-380px 0; height:24px; top:11px;}
 .nextline{ width:346px; font-size:14px; line-height:19px; margin-top:38px; margin-bottom:17px  }
 .nextline label{ position:relative; float:left; display:inline-block; cursor:pointer; color:#9b9b9b; }
 .nextline label b{ float:left; display:inline-block; width:20px; height:20px; background:url(../img/ico.png) -360px 2px no-repeat; margin-right:11px;}

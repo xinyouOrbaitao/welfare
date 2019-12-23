@@ -8,16 +8,8 @@
 	<title>登录</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
+	<script src="/static/js/code.js"></script>
 
-	<script>
-        var _hmt = _hmt || [];
-        (function() {
-            var hm = document.createElement("script");
-            hm.src = "//hm.baidu.com/hm.js?cbe66539543f147f5b0ae378b18d911a";
-            var s = document.getElementsByTagName("script")[0];
-            s.parentNode.insertBefore(hm, s);
-        })();
-	</script>
 </head>
 <body >
 
@@ -40,6 +32,17 @@
 						</div>
 						<div class="int">
 							<span class="iNote xf_register_intext3 hide"><i></i></span> <span id="s_password" class="iError "></span>
+						</div>
+					</li>
+					<li class="clearfix">
+						<div class="codeDiv" id="DivCode">
+							<i class="icoCode"></i><input type="text" id="code" name="code" value="" placeholder="请输入验证码">
+						</div>
+						<div class="codeImage">
+							<a href="#" onchange="getCode()"> <img src="/getCode" id="codeImg" ></a>
+						</div>
+						<div class="int">
+							<span class="iNote xf_register_intext3 hide"><i></i></span> <span id="s_code" class="iError "></span>
 						</div>
 					</li>
 
@@ -72,7 +75,19 @@
             alert("");
         }
     })
-
+	$("img").click(function(){
+		$.ajax({
+			type: 'GET',
+			url: '/getCode',
+			error: function (data) {
+				alert("网络异常，请重试!");
+				location.reload();
+			},
+			success: function (data) {
+				$("#codeImg").attr("src","/getCode");
+			}
+		});
+	})
       $(document).ready(function () {
         if (getCookies("cookieUserName") != null) {
             $("#name").val(getCookies("cookieUserName"));
@@ -100,7 +115,7 @@
     function login() {
         var name = $("#name").val();
         var password = $("#password").val();
-
+		var code = $("#code").val();
         if (name == '') {
             $("#nameError").addClass("error");
             $("#s_userName").show();
@@ -132,6 +147,21 @@
             $("#DivName").removeClass("inpu error");
             $("#DivName").addClass("inpu");
         }
+        if (code == '') {
+            $("#codeError").addClass("error");
+            $("#s_code").show();
+            $("#s_code").html("请输入验证码");
+
+            $("#DivCode").removeClass("inpu");
+            $("#DivCode").addClass("inpu error");
+            return;
+        } else {
+            $("#codeError").removeClass("error");
+            $("#s_code").hide();
+
+            $("#DivCode").removeClass("inpu error");
+            $("#DivCode").addClass("inpu");
+        }
 
 
         if ($("#label_login").hasClass("z_sel")) {
@@ -145,7 +175,7 @@
         }
 
         $.ajax({
-            data: {username: name, password: password},
+            data: {username: name, password: password,code:code},
             type: 'POST',
             dataType: 'json',
             url: '/login',

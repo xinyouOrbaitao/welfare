@@ -14,8 +14,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.awt.image.RenderedImage;
+import java.io.OutputStream;
 
 /**
  * @Author ：zhangyue.
@@ -41,7 +44,36 @@ public class LoginController {
 
         return new ModelAndView("register");
     }
+    @RequestMapping("/getCode")
+    public void getCode(HttpServletResponse response, HttpServletRequest request) {
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setDateHeader("Expires", -1);
+        response.setContentType("image/jpeg");
 
+        String code  = LoginAccountUtil.getCode();
+        if (!StringUtils.isEmpty(code)) {
+            CookieUtil.addCode(response,code,request);
+            OutputStream sos = null;
+            try {
+                RenderedImage image = LoginAccountUtil.generateCodeAndPic(code);
+                sos = response.getOutputStream();
+                ImageIO.write(image, "jpeg", sos);
+                sos.close();
+                response.flushBuffer();
+            } catch (Exception e) {
+
+            } finally {
+                try {
+                    if (sos != null) {
+                        sos.close();
+                    }
+                } catch (Exception e) {
+
+                }
+            }
+        }
+    }
     /* 忘记密码界面*/
     @RequestMapping(value = "/updatePassword", method = RequestMethod.GET)
     public ModelAndView updatePassword() {
@@ -50,7 +82,7 @@ public class LoginController {
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
-    public String login(HttpServletResponse res, String username, String password) {
+    public String login(HttpServletResponse res, String username, String password,String code, HttpServletRequest request) {
         System.out.println("登录的用户名是:"+username);
         //System.out.println("注册的密码是:"+);
         JSONObject jsonObject = new JSONObject();
@@ -64,6 +96,18 @@ public class LoginController {
             jsonObject.put("message", "密码不能为空");
             return jsonObject.toString();
         }
+        if (StringUtils.isEmpty(code)) {
+            jsonObject.put("code", "1");
+            jsonObject.put("message", "验证码不能为空");
+            return jsonObject.toString();
+        }
+        String cookieCode = CookieUtil.getCode(request);
+        if(!cookieCode.equalsIgnoreCase(code)){
+            jsonObject.put("code", "1");
+            jsonObject.put("message", "验证码不正确");
+            return jsonObject.toString();
+        }
+
         UserEntity entity = userService.login(username,password);
         if (StringUtils.isEmpty(entity)) {
             jsonObject.put("code", "1");

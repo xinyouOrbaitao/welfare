@@ -175,6 +175,16 @@ public class CookieUtil {
         return cookieMap;
     }
 
+    public static void addCode(HttpServletResponse response, String code,HttpServletRequest request){
+        Map<String, Cookie> map = readCookieMap(request);
+        deleteCookie(response, map.get(SystemConstants.LOGIN_CODE));
+        addCookie(response,SystemConstants.LOGIN_CODE,code,true);
+    }
+    public static String getCode(HttpServletRequest request){
+        Map<String, Cookie> cookieMap = WebUtil.readCookieMap(request);
+        String cookieToken = cookieMap.get(SystemConstants.LOGIN_CODE).getValue();
+        return cookieToken;
+    }
     /**
      * 对cookie值md5
      *

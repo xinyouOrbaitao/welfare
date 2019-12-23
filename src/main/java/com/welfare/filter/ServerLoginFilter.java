@@ -69,6 +69,7 @@ public class ServerLoginFilter implements Filter {
     private boolean isSkip(String url) {
         if (url.endsWith("/login")
                 || url.endsWith("/register")
+                || url.endsWith("/getCode")
                 || url.endsWith("/index")
                 || url.endsWith("/")
                 || url.endsWith("/file/down")
