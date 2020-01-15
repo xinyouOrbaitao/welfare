@@ -283,4 +283,11 @@ public class ViewController {
         modelMap.addAttribute("user", userEntity);
         return "userUpdate";
     }
+
+    @RequestMapping(value = "/query/hash")
+    public String queryHash(Model modelMap, HttpServletRequest request) {
+        UserEntity userEntity = LoginAccountUtil.getUserEntity(request);
+        modelMap.addAttribute("user", userEntity);
+        return "hash";
+    }
 }

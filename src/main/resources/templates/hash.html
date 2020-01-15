@@ -1,0 +1,178 @@
+<!DOCTYPE>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>个人中心</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/nav.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/myrecord.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/alterperson.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/animate.css">
+
+    <script src="../static/js/jquery-2.2.3.min.js"></script>
+    <script src="../static/js/bootstrap.min.js"></script>
+    <script src="../static/js/jquery.pricetable.min.js"></script>
+    <script src="../static/js/changecolor.js"></script>
+    <script>
+        $(function () {
+            $("#qiehuan").click(function () {
+                $("#ondisplay").css('display', 'none');
+                $("#update").css('display', 'block');
+            });
+
+        });
+        $(document).ready(function () {
+            var pt = $('#priceTable1').priceTable();
+        });
+
+        function syntaxHighlight(json) {
+            if (typeof json != 'string') {
+                json = JSON.stringify(json, undefined, 2);
+            }
+            json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function(match) {
+                var cls = 'number';
+                if (/^"/.test(match)) {
+                    if (/:$/.test(match)) {
+                        cls = 'key';
+                    } else {
+                        cls = 'string';
+                    }
+                } else if (/true|false/.test(match)) {
+                    cls = 'boolean';
+                } else if (/null/.test(match)) {
+                    cls = 'null';
+                }
+                return '<span class="' + cls + '">' + match + '</span>';
+            });
+        }
+    </script>
+
+</head>
+<style type="text/css">
+
+    pre {outline: 1px solid #ccc; padding: 5px; margin: 5px; }
+    .string { color: green; }
+    .number { color: darkorange; }
+    .boolean { color: blue; }
+    .null { color: magenta; }
+    .key { color: red; }
+
+</style>
+<body >
+<div th:replace="part/userhead :: a"></div>
+<div class="container">
+
+    <div class="row">
+        <div class="col-xs-11 col-xs-offset-1">
+            <div class="col-xs-3">
+                <ul class="nav nav-tabs nav-stacked text-center" id="sidebarMenu">
+                    <li id="li1" ><a href="/user">我发起的公益</a></li>
+                    <li id="li3" ><a href="/donateLog">我的捐款记录</a></li>
+                    <li id="li4" class="active"><a href="/update/userview">修改个人信息</a></li>
+                </ul>
+            </div>
+            <div class="col-xs-9">
+                <div class="row">
+                    <div class="content col-xs-10 col-xs-offset-1">
+                        <div class="title">
+							 <span class="listtitle h2">
+							 	查询交易记录
+							 </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row col-xs-10 col-xs-offset-1">
+                    <div>
+                        <span>请输入交易hash值：</span><input type="text" id="queryHash"> <button onclick="query()"> 查询</button>
+                    </div>
+
+                    <div>
+                        <span>转移资产数量：</span><span id="total" th:text="${total}"></span>
+                    </div>
+
+                    <div>
+                        <span>源账号：</span><span id="sourceAddress" th:text="${sourceAddress}"></span>
+                    </div>
+                    <div>
+                        <span>目的账号：</span><span id="destAddress" th:text="${destAddress}"> </span>
+                    </div>
+<!--                    <div>-->
+<!--                        <span>创建时间：</span><span id="time"> </span>-->
+<!--                    </div>-->
+                    <div>
+                        <span>签名列表：</span><span id="sign" th:text="${sign}"></span>
+                    </div>
+                    <div>
+                        <span>操作类型：</span><span id="type" th:text="${type}"></span>
+                    </div>
+                    <div class="panel" >
+                        <pre id="result">
+
+                        </pre>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+<div th:replace="part/footer :: a"></div>
+
+
+<script type="text/javascript">
+
+    function query() {
+        var hash = $("#queryHash").val();
+
+        //
+        $.ajax({
+            data: {hash:hash},
+            type: 'POST',
+            dataType: 'json',
+            url: '/user/queryHash',
+            error: function (data) {
+                alert("网络异常，请重试!");
+            },
+            success: function (data) {
+                console.log(data)
+                debugger;
+                if(data!=null){
+                    var obj =data;
+                    var totals = obj.transactions[0].transaction.operations[0].create_account.init_balance;
+                    var sourAddress = obj.transactions[0].transaction.source_address;
+                    var deAddress = obj.transactions[0].transaction.operations[0].create_account.dest_address;
+                    var si = obj.transactions[0].signatures;
+                    var types = obj.transactions[0].transaction.operations[0].type;
+                    if(types=="1"){
+                       $("#type").val("创建");
+                    }
+
+                    //
+                    // var date = new Date(obj.transactions[0].close_time);
+                    // var Y = date.getFullYear() + '-';
+                    // var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+                    // var D = date.getDate() + ' ';
+                    // var h = date.getHours() + ':';
+                    // var m = date.getMinutes() + ':';
+                    // var s = date.getSeconds();
+                    // console.log(Y+M+D+h+m+s);
+                    // $("#time").text(Y+M+D+h+m+s);
+                    $("#total").text(totals);
+                    $("#sourceAddress").text(sourAddress);
+                    $("#destAddress").text(deAddress);
+                    $("#sign").text(JSON.stringify(si));
+                    $('#result').html(syntaxHighlight(data));
+
+                }
+
+            }
+        });
+    }
+
+
+
+</script>
+</body>
+
+</html>

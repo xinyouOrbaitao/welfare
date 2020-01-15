@@ -124,6 +124,24 @@ public class BumoServiceImpl implements BumoService {
             logger.info("error: " + response.getErrorDesc());
         }
     }
+
+    @Override
+    public String queryHash(String hash) {
+        String  result = "";
+        TransactionGetInfoRequest request = new TransactionGetInfoRequest();
+        request.setHash(hash);
+
+        // Call getInfo
+        TransactionGetInfoResponse response = sdk.getTransactionService().getInfo(request);
+        if (response.getErrorCode() == 0) {
+            result = response.getResult().toString();
+            System.out.println(JSON.toJSONString(result, true));
+        } else {
+            System.out.println("error: " + response.getErrorDesc());
+        }
+        return result;
+    }
+
     public String sendBu(String senderPrivateKey, String destAddress, int buAmount) {
         // Init variable
         // The amount to be sent

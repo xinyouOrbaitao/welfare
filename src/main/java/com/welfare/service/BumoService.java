@@ -20,4 +20,6 @@ public interface BumoService {
     public String withdraw(long userId,int amount);
 
     public void queryAccount(long userId);
+
+    public String queryHash(String hash);
 }
