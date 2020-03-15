@@ -3,14 +3,18 @@ package com.welfare.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.welfare.TrustMain;
 import com.welfare.dao.*;
 import com.welfare.entity.*;
+import com.welfare.eumn.RelationEnum;
 import com.welfare.service.BumoService;
 import com.welfare.service.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -38,6 +42,9 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Autowired
     private BumoService bumoService;
+    @Resource
+    private TrustMain trustMain;
+
     /**
      * 充值功能
      * 1.余额增加
@@ -63,7 +70,7 @@ public class UserAccountServiceImpl implements UserAccountService {
         userAccountLogEntity.setCreateTime(new Date());
         userAccountLogEntity.setType("1");
         userAccountLogEntity.setUserId(userId);
-        String hash = bumoService.recharge(userId,amount);
+        String hash = bumoService.recharge(userId, amount);
         userAccountLogEntity.setHash(hash);
         userAccountLogDao.insertSelective(userAccountLogEntity);
         jsonObject.put("code", "SUCCESS");
@@ -100,7 +107,7 @@ public class UserAccountServiceImpl implements UserAccountService {
             userAccountLogEntity.setCreateTime(new Date());
             userAccountLogEntity.setType("3");
             userAccountLogEntity.setUserId(userId);
-            String hash = bumoService.withdraw(userId,amount);
+            String hash = bumoService.withdraw(userId, amount);
             userAccountLogEntity.setHash(hash);
             userAccountLogDao.insertSelective(userAccountLogEntity);
             jsonObject.put("code", "SUCCESS");
@@ -139,7 +146,7 @@ public class UserAccountServiceImpl implements UserAccountService {
      * @param amount    捐赠金额
      */
     @Override
-    public JSONObject donate(long userId, String welfareId, int amount) {
+    public JSONObject donate(long userId, String welfareId, int amount, Integer type) {
 
         JSONObject jsonObject = new JSONObject();
         WelfareEntity welfareEntity = welfareDao.selectWelfareOne(welfareId);
@@ -150,7 +157,7 @@ public class UserAccountServiceImpl implements UserAccountService {
             jsonObject.put("msg", "账号余额不足");
             return jsonObject;
         }
-        if(Long.toString(toUserEntity.getUserId()).equals(Long.toString(userId))){
+        if (Long.toString(toUserEntity.getUserId()).equals(Long.toString(userId))) {
             jsonObject.put("code", "error");
             jsonObject.put("msg", "不能給自己捐款！");
             return jsonObject;
@@ -166,7 +173,7 @@ public class UserAccountServiceImpl implements UserAccountService {
         long userMoney = userAccountEntity.getMoney();
         if (userMoney > amount) {
             long balance = userMoney - amount;
-            long toBalance = toUserEntity.getMoney()+amount;
+            long toBalance = toUserEntity.getMoney() + amount;
             userAccountDao.updateUserAccount(balance, userId);
             userAccountDao.updateUserAccount(toBalance, toUserEntity.getUserId());
             UserAccountLogEntity userAccountLogEntity = new UserAccountLogEntity();
@@ -177,13 +184,15 @@ public class UserAccountServiceImpl implements UserAccountService {
             userAccountLogEntity.setType("2");
             userAccountLogEntity.setUsername(userEntity.getUsername());
             userAccountLogEntity.setUserId(userId);
-            String hash = bumoService.sendBu(userId,toUserEntity.getUserId(),amount);
+            String hash = bumoService.sendBu(userId, toUserEntity.getUserId(), amount);
             userAccountLogEntity.setHash(hash);
             userAccountLogDao.insertSelective(userAccountLogEntity);
+            List<UserAccountLogEntity> list = userAccountLogDao.selectListByUserId(2, welfareId, userId);
             long total = welfareEntity.getWelfareActualAccount() + amount;
             welfareDao.updateWelfareAccount(welfareEntity.getId(), total);
             if (total > welfareEntity.getWelfareAccount()) {
-                welfareDao.updateStatus(welfareEntity.getId() + "", "3");
+                BigDecimal value = getValue(amount, type, welfareEntity.getWelfareValue(), list.size());
+                welfareDao.updateStatus(welfareEntity.getId() + "", "3", value);
             }
             WelfareLogEntity welfareLogEntity = new WelfareLogEntity();
             welfareLogEntity.setCode(welfareEntity.getBuHash());
@@ -205,5 +214,27 @@ public class UserAccountServiceImpl implements UserAccountService {
         return userAccountDao.selectByUserId(userId);
     }
 
+
+    public BigDecimal getValue(Integer amount, Integer type, BigDecimal value, int times) {
+
+        // 初始化项目状态信任值(0.5)
+        float state_value = value.floatValue();
+        // 1.根据当前用户user_i与项目发起人的关系计算角色信任值;
+        // 假设用户user_i与当前项目发起人的关系是“亲戚”;
+        RelationEnum relationEnum = RelationEnum.valueToEnum(type);
+        float role_value = trustMain.is_relation(relationEnum);
+
+        // 2.根据项目的募捐金额和评估金额计算状态信任值
+        float state_change = trustMain.is_disparity(amount);
+        state_value -= state_change;
+
+        // 3.计算聚合信用值,即项目的信任值（保留两位小数）
+        // 计算捐款金额权重
+        float amount_weight = trustMain.is_weight(amount);
+        //当前用户向该项目的捐款次数
+        float t_trust_value = trustMain.cal_togetherTrust(times, role_value, amount_weight, state_value);
+        t_trust_value = (float) (Math.round(t_trust_value * 100.0) / 100.0);
+        return new BigDecimal(t_trust_value);
+    }
 
 }

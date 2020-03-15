@@ -51,7 +51,7 @@ public interface UserAccountService {
      * @param welfareId 公益项目ID
      * @param amount    捐赠金额
      */
-    public JSONObject donate(long userId, String welfareId, int amount);
+    public JSONObject donate(long userId, String welfareId, int amount,Integer type);
 
     /**
      * 查询用户账号信息

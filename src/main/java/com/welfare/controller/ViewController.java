@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -67,8 +68,8 @@ public class ViewController {
         UserEntity userEntity = LoginAccountUtil.getUserEntity(request);
         modelMap.addAttribute("user", userEntity);
         UserAccountEntity userAccountEntity = userAccountService.selectUserAccount(userEntity.getId());
-        if(userAccountEntity==null){
-            userAccountEntity=new UserAccountEntity();
+        if (userAccountEntity == null) {
+            userAccountEntity = new UserAccountEntity();
         }
         modelMap.addAttribute("userAccountEntity", userAccountEntity);
         return "recharge";
@@ -85,8 +86,8 @@ public class ViewController {
         UserEntity userEntity = LoginAccountUtil.getUserEntity(request);
         modelMap.addAttribute("user", userEntity);
         UserAccountEntity userAccountEntity = userAccountService.selectUserAccount(userEntity.getId());
-        if(userAccountEntity==null){
-            userAccountEntity=new UserAccountEntity();
+        if (userAccountEntity == null) {
+            userAccountEntity = new UserAccountEntity();
         }
         modelMap.addAttribute("userAccountEntity", userAccountEntity);
         return "withdraw";
@@ -195,7 +196,7 @@ public class ViewController {
         UserEntity userEntity = LoginAccountUtil.getUserEntity(request);
         List<UserAccountLogEntity> list = userAccountService.selectLogList(userEntity.getId());
         UserAccountEntity userAccountEntity = userAccountService.selectUserAccount(userEntity.getId());
-        if(userAccountEntity==null){
+        if (userAccountEntity == null) {
             userAccountEntity = new UserAccountEntity();
         }
         modelMap.addAttribute("user", userEntity);
@@ -220,11 +221,9 @@ public class ViewController {
 
         PageInfo<WelfareEntity> resultList = welfareService.selectListByIndex(pageParam.getPageNo(), pageParam.getPageSize());
         resultList.getList().stream().forEach(entity -> {
-            long num1 = entity.getWelfareActualAccount();
-            long num2 = entity.getWelfareAccount();
             NumberFormat numberFormat = NumberFormat.getInstance();
             numberFormat.setMaximumFractionDigits(2);
-            String result = numberFormat.format((float) num1 / (float) num2 * 100) + "%";
+            String result = numberFormat.format(entity.getWelfareValue().multiply(new BigDecimal(100)).intValue()) + "%";
             entity.setRatio(result);
             String style = "width:" + result;
             entity.setStyle(style);

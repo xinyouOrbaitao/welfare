@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -34,14 +35,15 @@ public class WelfareController {
     @Autowired
     private WelfareLogService welfareLogService;
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST , produces = "application/json;charset=UTF-8")
+    @RequestMapping(value = "/add", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
     public String add(@RequestBody WelfareEntity entity, HttpServletRequest request) {
         JSONObject jsonObject = new JSONObject();
         UserEntity userEntity = LoginAccountUtil.getUserEntity(request);
         jsonObject.put("code", "SUCCESS");
-        entity.setWelfareSponsor(userEntity.getId()+"");
+        entity.setWelfareSponsor(userEntity.getId() + "");
         entity.setWelfareSponsorName(userEntity.getUsername());
+        entity.setWelfareValue(BigDecimal.valueOf(0.5));
         welfareService.save(entity);
         return jsonObject.toJSONString();
     }
@@ -72,7 +74,7 @@ public class WelfareController {
 
     @RequestMapping(value = "/selectLog", method = RequestMethod.POST)
     @ResponseBody
-    public String selectLog(String welfareId,HttpServletRequest request) {
+    public String selectLog(String welfareId, HttpServletRequest request) {
         JSONObject jsonObject = new JSONObject();
         UserEntity userEntity = LoginAccountUtil.getUserEntity(request);
         if (StringUtils.isEmpty(userEntity)) {

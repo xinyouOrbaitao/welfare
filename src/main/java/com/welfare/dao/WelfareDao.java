@@ -4,6 +4,7 @@ import com.welfare.MyMapper;
 import com.welfare.entity.WelfareEntity;
 import org.apache.ibatis.annotations.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -21,8 +22,9 @@ public interface WelfareDao extends MyMapper<WelfareEntity> {
      * @param state
      * @return
      */
-    @Update("update welfare set state = #{state,jdbcType=VARCHAR} where id =  #{welfareId,jdbcType=VARCHAR}")
-    public int updateStatus(@Param("welfareId") String welfareId, @Param("state") String state);
+    @Update("update welfare set state = #{state,jdbcType=VARCHAR},welfare_value = #{welfareValue} where id =  #{welfareId,jdbcType=VARCHAR}")
+    public int updateStatus(@Param("welfareId") String welfareId, @Param("state") String state,
+                            @Param("welfareValue")BigDecimal welfareValue);
 
     @Results(id = "query", value = {
             @Result(property = "id", column = "id"),

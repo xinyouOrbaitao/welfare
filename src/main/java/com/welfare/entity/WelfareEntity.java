@@ -3,6 +3,7 @@ package com.welfare.entity;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -45,6 +46,8 @@ public class WelfareEntity {
     private String tag;
     @Column(name = "image")
     private String image;
+    @Column(name = "welfare_value")
+    private BigDecimal welfareValue;
 
     private String style;
     private String ratio;
@@ -192,5 +195,13 @@ public class WelfareEntity {
 
     public void setWelfareSponsorName(String welfareSponsorName) {
         this.welfareSponsorName = welfareSponsorName;
+    }
+
+    public BigDecimal getWelfareValue() {
+        return welfareValue;
+    }
+
+    public void setWelfareValue(BigDecimal welfareValue) {
+        this.welfareValue = welfareValue;
     }
 }

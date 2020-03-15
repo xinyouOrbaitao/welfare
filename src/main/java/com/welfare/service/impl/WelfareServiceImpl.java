@@ -61,7 +61,7 @@ public class WelfareServiceImpl implements WelfareService {
 
     @Override
     public void updateStatus(String welfareId, String state) {
-        welfareDao.updateStatus(welfareId, state);
+        welfareDao.updateStatus(welfareId, state, null);
     }
 
     @Override
@@ -159,6 +159,7 @@ public class WelfareServiceImpl implements WelfareService {
 
     /**
      * 根据项目Id查询捐款总人数
+     *
      * @param id
      * @return
      */
@@ -173,9 +174,9 @@ public class WelfareServiceImpl implements WelfareService {
 
     @Override
     public List<WelfareEntity> selectListByIdList(List<Long> list) {
-        if(list.size()>0){
+        if (list.size() > 0) {
             return welfareDao.selectListByIdList(list);
-        }else {
+        } else {
             return new ArrayList<>();
         }
 

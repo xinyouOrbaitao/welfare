@@ -54,7 +54,23 @@ public interface UserAccountLogDao extends MyMapper<UserAccountLogEntity> {
             "</where>" +
             "</script>"
     )
-    public List<UserAccountLogEntity> selectListByWelfareId(@Param("type") Integer type, @Param("welfareId")String welfareId);
+    public List<UserAccountLogEntity> selectListByWelfareId(@Param("type") Integer type, @Param("welfareId")String welfareId); @ResultMap(value = "queryAccountLog")
+    @Select("<script> " +
+            "select * from user_account_log " +
+            "<where>" +
+            "<if test = 'type!=null and type!=0 '> " +
+            " and type = #{type,jdbcType=INTEGER}" +
+            "</if>" +
+            "<if test = 'welfareId!=null '> " +
+            " and welfare_id = #{welfareId,jdbcType=VARCHAR}" +
+            "</if>" +
+            "<if test = 'userId!=null '> " +
+            " and user_id = #{userId,jdbcType=INTEGER}" +
+            "</if>" +
+            "</where>" +
+            "</script>"
+    )
+    public List<UserAccountLogEntity> selectListByUserId(@Param("type") Integer type, @Param("welfareId")String welfareId,long userId);
 
     @Select("SELECT SUM(amount) FROM user_account_log WHERE type = 2 ")
     public Integer selectTotalAmount();
